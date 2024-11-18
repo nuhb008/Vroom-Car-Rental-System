@@ -14,13 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Model.Client;
-import Model.Database;
-import Model.JButton;
-import Model.JLabel;
-import Model.JPasswordField;
-import Model.JTextField;
-import Model.User;
+import Model.*;
 
 public class Main {
 
@@ -92,7 +86,14 @@ public class Main {
                     users.add(user);
 
                 } else if (type==1) {
-
+                    user = new Admin();
+                    user.setID(ID);
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setEmail(em);
+                    user.setPhoneNumber(phoneNumber);
+                    user.setPassword(pass);
+                    users.add(user);
                 }
             }
         } catch (SQLException e) {

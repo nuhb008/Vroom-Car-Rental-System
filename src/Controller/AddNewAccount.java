@@ -40,7 +40,7 @@ public class AddNewAccount implements Operation {
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("Welcome to Car Rental System", 35);
+        JLabel title = new JLabel("Vroom", 35);
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
         frame.add(title, BorderLayout.NORTH);
 

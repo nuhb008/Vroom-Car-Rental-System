@@ -1,7 +1,5 @@
 package Model;
 
-import Controller.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -12,34 +10,50 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Controller.AddNewAccount;
+import Controller.AddNewCar;
+import Controller.ChangePassword;
+import Controller.DeleteCar;
+import Controller.EditUserData;
+import Controller.ShowAllRents;
+import Controller.ShowSpecUserRents;
+import Controller.UpdateCar;
+import Controller.ViewCars;
 
-public class Client extends User {
+public class Admin extends User {
 
     private Operation[] operations = new Operation[] {
+            new AddNewCar(),
             new ViewCars(),
-            new RentCar(),
-            new ReturnCar(),
-            new ShowUserRents(),
+            new UpdateCar(),
+            new DeleteCar(),
+            new AddNewAccount(1),
+            new ShowAllRents(),
+            new ShowSpecUserRents(),
             new EditUserData(),
             new ChangePassword()};
+
     private JButton[] btns = new JButton[] {
+            new JButton("Add New Car", 22),
             new JButton("View Cars", 22),
-            new JButton("Rent Car", 22),
-            new JButton("Return Car", 22),
-            new JButton("Show My Rents", 22),
-            new JButton("Edit My Data", 22),
+            new JButton("Update Car", 22),
+            new JButton("Delete Car", 22),
+            new JButton("Add New Admin", 22),
+            new JButton("Show Rents", 22),
+            new JButton("Show User's Rents", 22),
+            new JButton("Edit my Data", 22),
             new JButton("Change Password", 22)
     };
 
-    public Client() {
+    public Admin() {
         super();
     }
 
     @Override
     public void showList(Database database, JFrame f) {
 
-        JFrame frame = new JFrame("Client Panel");
-        frame.setSize(400, btns.length*90);
+        JFrame frame = new JFrame("Admin Panel");
+        frame.setSize(400, btns.length*80);
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());
@@ -59,7 +73,7 @@ public class Client extends User {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    operations[j].operation(database, frame, Client.this);
+                    operations[j].operation(database, frame, Admin.this);
                 }
             });
         }
