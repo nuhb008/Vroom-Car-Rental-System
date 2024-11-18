@@ -16,10 +16,10 @@ import javax.swing.JPanel;
 public class Client extends User {
 
     private Operation[] operations = new Operation[] {
-            new ViewCars(),
-            new RentCar(),
-            new ReturnCar(),
-            new ShowUserRents(),
+            new ViewCars(),                           //To be Implemented
+            new RentCar(),                           //To be Implemented
+            new ReturnCar(),                           //To be Implemented
+            new ShowUserRents(),                           //To be Implemented
             new EditUserData(),
             new ChangePassword()};
     private JButton[] btns = new JButton[] {
