@@ -66,7 +66,7 @@ public class Main {
             ResultSet rs = database.getStatement().executeQuery(select);
             while (rs.next()) {
                 User user;
-                int ID = rs.getInt("ID");
+                int ID = rs.getInt("userid");
                 String firstName = rs.getString("FirstName");
                 String lastName = rs.getString("LastName");
                 String em = rs.getString("Email");

@@ -23,7 +23,8 @@ import Controller.ViewCars;
 public class Admin extends User {
 
     private Operation[] operations = new Operation[] {
-            new AddNewCar(),                            //To be Implemented
+
+            new AddNewCar(),
             new ViewCars(),                             //To be Implemented
             new UpdateCar(),                             //To be Implemented
             new DeleteCar(),                             //To be Implemented
