@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class Database {
 
     private String user = "root";
-    private String password = "007911";
+    private String password = "1234";
     private String url = "jdbc:mysql://localhost:3306/carrentalsystem";  // Add port 3306
     private Connection connection;
     private Statement statement;
