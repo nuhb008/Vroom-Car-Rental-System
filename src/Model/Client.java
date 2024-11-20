@@ -28,7 +28,8 @@ public class Client extends User {
             new JButton("Return Car", 22),
             new JButton("Show My Rents", 22),
             new JButton("Edit My Data", 22),
-            new JButton("Change Password", 22)
+            new JButton("Change Password", 22),
+            new JButton("Log Out", 22)
     };
 
     public Client() {
@@ -39,6 +40,7 @@ public class Client extends User {
     public void showList(Database database, JFrame f) {
 
         JFrame frame = new JFrame("Client Panel");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, btns.length*90);
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
@@ -59,7 +61,12 @@ public class Client extends User {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    operations[j].operation(database, frame, Client.this);
+                    if (j == btns.length - 1) { // Logout button is the last in the array
+                        frame.dispose(); // Close the client panel
+                        Main.start();    // Reopen the login frame
+                    } else {
+                        operations[j].operation(database, frame, Client.this);
+                    }
                 }
             });
         }

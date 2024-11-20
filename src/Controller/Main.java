@@ -27,6 +27,7 @@ public class Main {
 
     public static void start() {
         JFrame frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(600, 330);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
@@ -136,3 +137,4 @@ public class Main {
     }
 
 }
+

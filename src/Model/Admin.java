@@ -10,15 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Controller.AddNewAccount;
-import Controller.AddNewCar;
-import Controller.ChangePassword;
-import Controller.DeleteCar;
-import Controller.EditUserData;
-import Controller.ShowAllRents;
-import Controller.ShowSpecUserRents;
-import Controller.UpdateCar;
-import Controller.ViewCars;
+import Controller.*;
 
 public class Admin extends User {
 
@@ -42,7 +34,8 @@ public class Admin extends User {
             new JButton("Show Rents", 22),
             new JButton("Show User's Rents", 22),
             new JButton("Edit my Data", 22),
-            new JButton("Change Password", 22)
+            new JButton("Change Password", 22),
+            new JButton("Log Out", 22)
     };
 
     public Admin() {
@@ -53,6 +46,7 @@ public class Admin extends User {
     public void showList(Database database, JFrame f) {
 
         JFrame frame = new JFrame("Admin Panel");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, btns.length*80);
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
@@ -73,7 +67,12 @@ public class Admin extends User {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    operations[j].operation(database, frame, Admin.this);
+                    if (j == btns.length - 1) { // Logout button is the last in the array
+                        frame.dispose(); // Close the client panel
+                        Main.start();    // Reopen the login frame
+                    } else {
+                        operations[j].operation(database, frame, Admin.this);
+                    }
                 }
             });
         }
