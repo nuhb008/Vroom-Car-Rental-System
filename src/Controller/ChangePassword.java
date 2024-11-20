@@ -91,7 +91,7 @@ public class ChangePassword implements Operation {
 
                 try {
                     String update = "UPDATE `users` SET "
-                            + "`Password`='"+newPassword.getText()+"' WHERE `ID` = '"+user.getID()+"';";
+                            + "`Password`='"+newPassword.getText()+"' WHERE `userid` = '"+user.getID()+"';";
                     database.getStatement().execute(update);
                     JOptionPane.showMessageDialog(frame, "Password changed successfully");
                     user.setPassword(newPassword.getText());

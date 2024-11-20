@@ -96,7 +96,7 @@ public class EditUserData implements Operation {
                 String update = "UPDATE `users` SET `FirstName`='"+firstName.getText()+"',"
                         + "`LastName`='"+lastName.getText()+"',`Email`='"+email.getText()+"',"
                         + "`PhoneNumber`='"+phoneNumber.getText()+"' "
-                        + "WHERE `ID` = '"+user.getID()+"';";
+                        + "WHERE `userid` = '"+user.getID()+"';";
 
                 try {
                     database.getStatement().execute(update);
