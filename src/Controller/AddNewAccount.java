@@ -139,7 +139,7 @@ public class AddNewAccount implements Operation {
                     rs.next();
                     int ID = rs.getInt("COUNT(*)");
 
-                    String insert = "INSERT INTO `users`(`ID`, `FirstName`, `LastName`,"
+                    String insert = "INSERT INTO `users`(`userid`, `FirstName`, `LastName`,"
                             + " `Email`, `PhoneNumber`, `Password`, `Type`) VALUES"
                             + " ('"+ID+"','"+firstName.getText()+"','"+lastName.getText()+"','"+email.getText()+"',"
                             + "'"+phoneNumber.getText()+"','"+password.getText()+"','"+accType+"');";
