@@ -68,4 +68,5 @@ public abstract class User {
 
     public abstract void showList(Database database, JFrame f);
 
+
 }
