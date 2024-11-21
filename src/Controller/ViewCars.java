@@ -25,7 +25,7 @@ public class ViewCars implements Operation {
         tableModel.addColumn("Color");
         tableModel.addColumn("Year");
         tableModel.addColumn("Price per Hour");
-        tableModel.addColumn("Available");
+        //tableModel.addColumn("Available");
 
         // Fetch data from the `cars` table
         try {
@@ -37,9 +37,9 @@ public class ViewCars implements Operation {
                 String color = rs.getString("Color");
                 int year = rs.getInt("Year");
                 double price = rs.getDouble("Price");
-                int available = rs.getInt("Available");
+                //int available = rs.getInt("Available");
 
-                tableModel.addRow(new Object[]{id, brand, model, color, year, price, available});
+                tableModel.addRow(new Object[]{id, brand, model, color, year, price});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(frame, "Error fetching data: " + e.getMessage());
