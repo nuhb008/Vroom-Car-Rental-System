@@ -135,16 +135,18 @@ public class AddNewAccount implements Operation {
                         return;
                     }
 
-                    ResultSet rs = database.getStatement().executeQuery("SELECT COUNT(*) FROM `users`;");
-                    rs.next();
-                    int ID = rs.getInt("COUNT(*)");
 
-                    String insert = "INSERT INTO `users`(`userid`, `FirstName`, `LastName`,"
+                    String insert = "INSERT INTO `users`(`FirstName`, `LastName`,"
                             + " `Email`, `PhoneNumber`, `Password`, `Type`) VALUES"
-                            + " ('"+ID+"','"+firstName.getText()+"','"+lastName.getText()+"','"+email.getText()+"',"
+                            + " ('"+firstName.getText()+"','"+lastName.getText()+"','"+email.getText()+"',"
                             + "'"+phoneNumber.getText()+"','"+password.getText()+"','"+accType+"');";
                     database.getStatement().execute(insert);
                     JOptionPane.showMessageDialog(frame, "Account created successfully");
+
+                    String selectQuery = "SELECT userid FROM users WHERE Email = '" + email.getText() + "';";
+                    ResultSet rs = database.getStatement().executeQuery(selectQuery);
+                    rs.next();
+                    String ID = rs.getString("userid");
 
                     if (accType==0) {
                         User user = new Client();
