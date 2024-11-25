@@ -39,6 +39,7 @@ public class RentCar implements Operation {
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JLabel title = new JLabel("Rent Car", 35);
         title.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));

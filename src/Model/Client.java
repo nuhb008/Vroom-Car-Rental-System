@@ -19,7 +19,7 @@ public class Client extends User {
             new ViewCars(),                           //To be Implemented
             new RentCar(),                           //To be Implemented
             new ReturnCar(),                           //To be Implemented
-            new ShowUserRents(),                           //To be Implemented
+            new ShowUserRents("-9999"),                           //To be Implemented
             new EditUserData(),
             new ChangePassword()};
     private JButton[] btns = new JButton[] {
