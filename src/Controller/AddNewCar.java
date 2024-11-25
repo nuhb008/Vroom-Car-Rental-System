@@ -140,7 +140,7 @@ public class AddNewCar implements Operation {
                     // Insert into `cars` table
                     ResultSet rs = database.getStatement().executeQuery("SELECT COUNT(*) FROM `cars`;");
                     rs.next();
-                    int ID = rs.getInt("COUNT(*)");
+                    int ID = rs.getInt("COUNT(*)")+1;
 
                     String insertCar = "INSERT INTO `cars`(`carid`, `Brand`, `Model`, `Color`,"
                             + " `Year`, `Price`, `Available`) VALUES ('" + ID + "','" + brand.getText() + "',"
