@@ -45,6 +45,7 @@ public class Client extends User {
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JLabel title = new JLabel("Welcome "+getFirstName(), 30);
         title.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));

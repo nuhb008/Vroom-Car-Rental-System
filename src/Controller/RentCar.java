@@ -138,8 +138,12 @@ public class RentCar implements Operation {
                 int hoursInt;
                 try {
                     hoursInt = Integer.parseInt(hours.getText());
+                    if (hoursInt <= 0) {
+                        JOptionPane.showMessageDialog(frame, "Rented hours must be more than 0");
+                        return;
+                    }
                 } catch (Exception e5) {
-                    JOptionPane.showMessageDialog(frame, "Hours must be int");
+                    JOptionPane.showMessageDialog(frame, "Hours must be a valid integer");
                     return;
                 }
                 try {
