@@ -1,24 +1,32 @@
 package Model;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class Database {
 
-    private String user = "root";
-    private String password = "nuh11558";
-    private String url = "jdbc:mysql://localhost:3306/carrentalsystem";  // Add port 3306
+    Properties properties = new Properties();
+    private String user ;
+    private String password ;
+    private String url ;  // Add port 3306
     private Connection connection;
     private Statement statement;
 
     public Database() {
         try {
+            FileInputStream inputStream = new FileInputStream("dbconfig.properties");
+            properties.load(inputStream);
+            inputStream.close();
             // Load the MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver"); // for MySQL Connector/J 8.0+
-
+            url = properties.getProperty("db.url");
+            user = properties.getProperty("db.user");
+            password = properties.getProperty("db.password");
             // Establish the connection
             connection = DriverManager.getConnection(url, user, password);
 
@@ -32,6 +40,8 @@ public class Database {
             e.printStackTrace();
         } catch (SQLException e) {
             System.out.println("Failed to connect to MySQL database.");
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

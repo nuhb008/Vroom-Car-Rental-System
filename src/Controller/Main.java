@@ -41,7 +41,7 @@ public class Main {
         panel.setBackground(null);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        panel.add(new JLabel("Email:", 22));
+        panel.add(new JLabel("Username:", 22));
 
         JTextField email = new JTextField(22);
         panel.add(email);
@@ -126,7 +126,7 @@ public class Main {
                     }
                 }
                 if (!loggedIn) {
-                    JOptionPane.showMessageDialog(frame, "Email or password doesn't match");
+                    JOptionPane.showMessageDialog(frame, "Username or password doesn't match");
                 }
             }
         });

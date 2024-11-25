@@ -1,56 +1,92 @@
 package Controller;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
+import Model.Car;
 import Model.Database;
+import Model.JLabel;
+import Model.JTable;
 import Model.Operation;
 import Model.User;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class ViewCars implements Operation {
+
     @Override
     public void operation(Database database, JFrame f, User user) {
-        JFrame frame = new JFrame("View All Cars");
-        frame.setSize(800, 600);
+
+        JFrame frame = new JFrame("Cars");
+        frame.setSize(1000, 600);
         frame.setLocationRelativeTo(f);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.getContentPane().setBackground(new Color(250, 206, 27));
+        frame.setLayout(new BorderLayout());
 
-        // Table model to hold the data
-        DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("ID");
-        tableModel.addColumn("Brand");
-        tableModel.addColumn("Model");
-        tableModel.addColumn("Color");
-        tableModel.addColumn("Year");
-        tableModel.addColumn("Price per Hour");
-        tableModel.addColumn("Available");
+        JLabel title = new JLabel("Cars", 35);
+        title.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        frame.add(title, BorderLayout.NORTH);
 
-        // Fetch data from the `cars` table
+        String[] header = new String[] {
+                "ID", "Brand", "Model", "Color", "Year", "Price", "Available"
+        };
+
+        String select = "SELECT * FROM `cars`;";
+        ArrayList<Car> cars = new ArrayList<>();
         try {
-            ResultSet rs = database.getStatement().executeQuery("SELECT * FROM `cars`");
+            ResultSet rs = database.getStatement().executeQuery(select);
             while (rs.next()) {
-                int id = rs.getInt("carid");
-                String brand = rs.getString("Brand");
-                String model = rs.getString("Model");
-                String color = rs.getString("Color");
-                int year = rs.getInt("Year");
-                double price = rs.getDouble("Price");
+                Car car = new Car();
+                car.setID(rs.getInt("carid"));
+                car.setBrand(rs.getString("Brand"));
+                car.setModel(rs.getString("Model"));
+                car.setColor(rs.getString("Color"));
+                car.setYear(rs.getInt("Year"));
+                car.setPrice(rs.getDouble("Price"));
                 int available = rs.getInt("Available");
-
-                tableModel.addRow(new Object[]{id, brand, model, color, year, price, available});
+                if (available<2) {
+                    car.setAvailable(available);
+                    cars.add(car);
+                }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(frame, "Error fetching data: " + e.getMessage());
-            return;
+            JOptionPane.showMessageDialog(frame, e.getMessage());
         }
 
-        // JTable to display the data
-        JTable table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-        frame.add(scrollPane);
+        String[][] carsData = new String[cars.size()][7];
+        for (int j=0;j<cars.size();j++) {
+            Car c = cars.get(j);
+            if (c.isAvailable()<2) {
+                carsData[j][0] = String.valueOf(c.getID());
+                carsData[j][1] = c.getBrand();
+                carsData[j][2] = c.getModel();
+                carsData[j][3] = c.getColor();
+                carsData[j][4] = String.valueOf(c.getYear());
+                carsData[j][5] = String.valueOf(c.getPrice()) + " $";
+                if (c.isAvailable()==0) {
+                    carsData[j][6] = "Available";
+                } else {
+                    carsData[j][6] = "Not Available";
+                }
+            }
+        }
 
+        Color color2 = new Color(252, 242, 202);
+
+        JScrollPane panel = new JScrollPane(new JTable(carsData, header, Color.black, color2));
+        panel.setBackground(null);
+        panel.getViewport().setBackground(null);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        frame.add(panel, BorderLayout.CENTER);
         frame.setVisible(true);
+
     }
+
 }
