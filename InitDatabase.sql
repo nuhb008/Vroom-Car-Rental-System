@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS rents (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
 --
 -- Trigger Logic for before_insert_user
 --
