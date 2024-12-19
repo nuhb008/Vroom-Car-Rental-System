@@ -1,27 +1,22 @@
 package Controller;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
-import Model.Car;
-import Model.Client;
-import Model.Database;
+import Model.*;
 import Model.JLabel;
 import Model.JTable;
-import Model.Operation;
-import Model.Rent;
-import Model.User;
+import Model.JTextField;
 
 public class ShowUserRents implements Operation {
     private String userID;
+    private String name;
+    private String email;
+    private String phone;
 
     public ShowUserRents(String userID) {
         this.userID = userID;
@@ -42,7 +37,7 @@ public class ShowUserRents implements Operation {
         frame.add(title, BorderLayout.NORTH);
 
         String[] header = new String[] {
-                "ID", "Name", "Email", "Tel", "Car ID", "Car", "Date Time",
+                "Car", "Date Time",
                 "Hours", "Total", "Status"
         };
 
@@ -73,6 +68,10 @@ public class ShowUserRents implements Operation {
             u.setPhoneNumber(rs2.getString("PhoneNumber"));
             u.setPassword(rs2.getString("Password"));
 
+            name = u.getLastName()+ ", "+ u.getFirstName();
+            email = u.getEmail();
+            phone = u.getPhoneNumber();
+
             for (int j=0;j<rents.size();j++) {
                 Rent r = rents.get(j);
                 r.setUser(u);
@@ -95,20 +94,23 @@ public class ShowUserRents implements Operation {
             frame.dispose();
         }
 
-        String[][] rentsData = new String[rents.size()][10];
+        String[][] rentsData = new String[rents.size()][5];
         for (int j=0;j<rents.size();j++) {
             Rent r = rents.get(j);
-            rentsData[j][0] = String.valueOf(r.getID());
-            rentsData[j][1] = r.getUser().getFirstName()+" "+r.getUser().getLastName();
-            rentsData[j][2] = r.getUser().getEmail();
-            rentsData[j][3] = r.getUser().getPhoneNumber();
-            rentsData[j][4] = String.valueOf(r.getCar().getID());
-            rentsData[j][5] = r.getCar().getBrand()+" "+r.getCar().getModel()+" "+r.getCar().getColor();
-            rentsData[j][6] = r.getDateTime();
-            rentsData[j][7] = String.valueOf(r.getHours());
-            rentsData[j][8] = String.valueOf(r.getTotal()) + " $";
-            rentsData[j][9] = r.getStatusToString();
+            rentsData[j][0] = r.getCar().getBrand()+" "+r.getCar().getModel()+" "+r.getCar().getColor();
+            rentsData[j][1] = r.getDateTime();
+            rentsData[j][2] = String.valueOf(r.getHours());
+            rentsData[j][3] = String.valueOf(r.getTotal()) + " $";
+            rentsData[j][4] = r.getStatusToString();
         }
+        JPanel panelD = new JPanel(new GridLayout(15, 2, 5, 5));
+        panelD.setBackground(null);
+        panelD.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        panelD.add(new JLabel("Name: " + name, 20));
+        panelD.add(new JLabel("Email: " + email, 20));
+        panelD.add(new JLabel("Phone Number: " + phone, 20));
+
 
         Color color2 = new Color(252, 242, 202);
 
@@ -117,6 +119,7 @@ public class ShowUserRents implements Operation {
         panel.getViewport().setBackground(null);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        frame.add(panelD, BorderLayout.WEST);
         frame.add(panel, BorderLayout.CENTER);
         frame.setVisible(true);
 
