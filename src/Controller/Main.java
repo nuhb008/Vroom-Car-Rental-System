@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,72 +62,50 @@ public class Main {
         });
         panel.add(createAcc);
 
-        ArrayList<User> users = new ArrayList<>();
-        try {
-            String select = "SELECT * FROM `users`;";
-            ResultSet rs = database.getStatement().executeQuery(select);
-            while (rs.next()) {
-                User user;
-                String ID = rs.getString("userid");
-                String firstName = rs.getString("FirstName");
-                String lastName = rs.getString("LastName");
-                String em = rs.getString("Email");
-                String phoneNumber = rs.getString("PhoneNumber");
-                String pass = rs.getString("Password");
-                int type = rs.getInt("Type");
-
-                if (type==0) {
-
-                    user = new Client();
-                    user.setID(ID);
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    user.setEmail(em);
-                    user.setPhoneNumber(phoneNumber);
-                    user.setPassword(pass);
-                    users.add(user);
-
-                } else if (type==1) {
-                    user = new Admin();
-                    user.setID(ID);
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    user.setEmail(em);
-                    user.setPhoneNumber(phoneNumber);
-                    user.setPassword(pass);
-                    users.add(user);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         JButton login = new JButton("Login", 22);
         login.addActionListener(new ActionListener() {
-            @SuppressWarnings("deprecation")
             @Override
             public void actionPerformed(ActionEvent e) {
+                String userEmail = email.getText();
+                String userPassword = new String(password.getPassword()); // Secure way to get password
 
-                if (email.getText().equals("")) {
-                    JOptionPane.showMessageDialog(frame, "Email cannot be empty");
+                if (userEmail.isEmpty() || userPassword.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Email or Password cannot be empty");
                     return;
                 }
 
-                if (password.getText().equals("")) {
-                    JOptionPane.showMessageDialog(frame, "Password cannot be empty");
-                    return;
-                }
+                try {
+                    String query = "SELECT * FROM users WHERE Email = ? LIMIT 1;";
+                    PreparedStatement pstmt = database.getConnection().prepareStatement(query);
+                    pstmt.setString(1, userEmail);
 
-                boolean loggedIn = false;
-                for (User u : users) {
-                    if (u.getEmail().equals(email.getText()) && u.getPassword().equals(password.getText())) {
-                        loggedIn = true;
-                        u.showList(database, frame);
-                        frame.dispose();
+                    ResultSet rs = pstmt.executeQuery();
+
+                    if (rs.next()) {
+                        String storedPassword = rs.getString("Password"); // Insecure: Store hashed passwords!
+
+                        // Password Validation (if using plain text)
+                        if (storedPassword.equals(userPassword)) {
+                            int userType = rs.getInt("Type");
+                            User user = (userType == 0) ? new Client() : new Admin();
+
+                            user.setID(rs.getString("userid"));
+                            user.setFirstName(rs.getString("FirstName"));
+                            user.setLastName(rs.getString("LastName"));
+                            user.setEmail(userEmail);
+                            user.setPhoneNumber(rs.getString("PhoneNumber"));
+                            user.setPassword(storedPassword);
+
+                            user.showList(database, frame);
+                            frame.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(frame, "Incorrect Password");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "User not found");
                     }
-                }
-                if (!loggedIn) {
-                    JOptionPane.showMessageDialog(frame, "Username or password doesn't match");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
