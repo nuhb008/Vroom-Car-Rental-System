@@ -25,7 +25,7 @@ public class EditUserData implements Operation {
     public void operation(Database database, JFrame f, User user) {
 
         JFrame frame = new JFrame("Edit Data");
-        frame.setSize(600, 450);
+        frame.setSize(1000, 450);
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());

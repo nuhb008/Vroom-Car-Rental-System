@@ -35,7 +35,7 @@ public class AddNewAccount implements Operation {
     public void operation(Database database, JFrame f, User u) {
 
         JFrame frame = new JFrame("Create New Account");
-        frame.setSize(600, 600);
+        frame.setSize(1000, 600);
         frame.setLocationRelativeTo(f);
         frame.getContentPane().setBackground(new Color(250, 206, 27));
         frame.setLayout(new BorderLayout());
