@@ -1,0 +1,14 @@
+import axios from "axios";
+
+const API_URL = "http://localhost:8081";
+
+export const login = async (username, password) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/auth/login`, { username, password });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Login failed";
+  }
+}
+export const getUsers = async () => axios.get(`${API_URL}/users`);
+export const getUserById = async (id) => axios.get(`${API_URL}/users/${id}`);
