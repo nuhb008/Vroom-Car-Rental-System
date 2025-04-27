@@ -15,3 +15,4 @@ export const getUserById = async (id) => axios.get(`${API_URL}/users/${id}`);
 export const deleteCar = async (regNo) => axios.delete(`${API_URL}/cars/regno/${regNo}`);
 export const getCarsByStatus = async (status) => axios.get(`${API_URL}/cars/${status}`);
 export const getCarsByOwner = async (id) => axios.get(`${API_URL}/cars/${id}`);
+export const getCarsByFuel = async (fuel) => axios.get(`${API_URL}/cars/fueltype/${fuel}`);
