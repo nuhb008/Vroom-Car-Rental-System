@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import CustomerDashboard from "./pages/CustomerDashboard";
 import { ToastContainer } from "react-toastify";
 
 import LandingPage from "./pages/LandingPage";
@@ -29,6 +29,7 @@ function App() {
 
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/owner" element={<OwnerDashboard />} />
+                <Route path="/customer" element={<CustomerDashboard />} />
             </Routes>
         </Router>
     );
