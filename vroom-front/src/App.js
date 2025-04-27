@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
+import AdminDashboard from "./pages/AdminDashboard";
 
 import { ToastContainer } from "react-toastify";
 
@@ -24,6 +25,8 @@ function App() {
 
 
                 <Route path="/login" element={<Login />} />
+
+                <Route path="/admin" element={<AdminDashboard />} />
                 
             </Routes>
         </Router>
