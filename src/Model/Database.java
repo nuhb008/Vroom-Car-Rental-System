@@ -46,6 +46,10 @@ public class Database {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     public Statement getStatement() {
         return statement;
     }
