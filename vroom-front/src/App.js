@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import LandingPage from "./pages/LandingPage";
 
 import Profile from "./pages/Profile";
+import OwnerDashboard from "./pages/OwnerDashboard";
 
 function App() {
     return (
@@ -27,7 +28,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 <Route path="/admin" element={<AdminDashboard />} />
-                
+                <Route path="/owner" element={<OwnerDashboard />} />
             </Routes>
         </Router>
     );
