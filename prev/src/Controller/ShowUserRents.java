@@ -37,6 +37,7 @@ public class ShowUserRents implements Operation {
         frame.add(title, BorderLayout.NORTH);
 
         String[] header = new String[] {
+                "Rent",
                 "Car", "Date Time",
                 "Hours", "Total", "Status"
         };
@@ -94,14 +95,15 @@ public class ShowUserRents implements Operation {
             frame.dispose();
         }
 
-        String[][] rentsData = new String[rents.size()][5];
+        String[][] rentsData = new String[rents.size()][6];
         for (int j=0;j<rents.size();j++) {
             Rent r = rents.get(j);
-            rentsData[j][0] = r.getCar().getBrand()+" "+r.getCar().getModel()+" "+r.getCar().getColor();
-            rentsData[j][1] = r.getDateTime();
-            rentsData[j][2] = String.valueOf(r.getHours());
-            rentsData[j][3] = String.valueOf(r.getTotal()) + " $";
-            rentsData[j][4] = r.getStatusToString();
+            rentsData[j][0] = String.valueOf(r.getID());
+            rentsData[j][1] = r.getCar().getBrand()+" "+r.getCar().getModel()+" "+r.getCar().getColor();
+            rentsData[j][2] = r.getDateTime();
+            rentsData[j][3] = String.valueOf(r.getHours());
+            rentsData[j][4] = String.valueOf(r.getTotal()) + " $";
+            rentsData[j][5] = r.getStatusToString();
         }
         JPanel panelD = new JPanel(new GridLayout(15, 2, 5, 5));
         panelD.setBackground(null);
