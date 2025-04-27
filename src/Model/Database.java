@@ -10,10 +10,16 @@ import java.util.Properties;
 
 public class Database {
 
+<<<<<<< HEAD
+    private String user = "root";
+    private String password = "007911";
+    private String url = "jdbc:mysql://localhost:3306/carrentalsystem";  // Add port 3306
+=======
     Properties properties = new Properties();
     private String user ;
     private String password ;
     private String url ;  // Add port 3306
+>>>>>>> ec92e77f9c906f5891b26f163ba2675cef8d1ca6
     private Connection connection;
     private Statement statement;
 
