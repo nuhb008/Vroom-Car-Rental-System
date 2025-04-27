@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage";
 
 import Profile from "./pages/Profile";
 import OwnerDashboard from "./pages/OwnerDashboard";
+import CarsPage from "./pages/CarsPage";
 
 function App() {
     return (
@@ -26,7 +27,7 @@ function App() {
 
 
                 <Route path="/login" element={<Login />} />
-
+                <Route path="/cars" element={<CarsPage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/customer" element={<CustomerDashboard />} />
