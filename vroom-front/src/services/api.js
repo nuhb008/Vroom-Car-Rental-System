@@ -12,3 +12,5 @@ export const login = async (username, password) => {
 }
 export const getUsers = async () => axios.get(`${API_URL}/users`);
 export const getUserById = async (id) => axios.get(`${API_URL}/users/${id}`);
+export const deleteCar = async (regNo) => axios.delete(`${API_URL}/cars/regno/${regNo}`);
+export const getCarsByStatus = async (status) => axios.get(`${API_URL}/cars/${status}`);
