@@ -14,7 +14,7 @@ import CarsPage from "./pages/CarsPage";
 import CarForm from "./components/Cars/CarForm";
 import CarList from "./components/Cars/CarList";
 import CarProfile from "./components/Cars/CarProfile";
-
+import BookCar from "./pages/BookCar";
 function App() {
     return (
         <Router>
@@ -34,6 +34,7 @@ function App() {
                 <Route path="/cars/edit/:regNo" element={<CarForm />} />
                 <Route path="/cars/ownerlist" element={<CarList />} />
                 <Route path="/cars/profile/:regNo" element={<CarProfile />} />
+                <Route path="/bookcar/:regNo" element={<BookCar />} />
 
 
                 <Route path="/admin" element={<AdminDashboard />} />
