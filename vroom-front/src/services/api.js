@@ -17,3 +17,5 @@ export const getCarsByStatus = async (status) => axios.get(`${API_URL}/cars/${st
 export const getCarsByOwner = async (id) => axios.get(`${API_URL}/cars/${id}`);
 export const getCarsByFuel = async (fuel) => axios.get(`${API_URL}/cars/fueltype/${fuel}`);
 export const getAllCars = async () => axios.get(`${API_URL}/cars`);
+export const getCarByRegNo = async (regNo) => axios.get(`${API_URL}/cars/regno/${regNo}`);
+export const updateCar = async (regNo, car) => axios.put(`${API_URL}/cars/regno/${regNo}`, car);
