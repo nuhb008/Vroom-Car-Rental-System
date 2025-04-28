@@ -30,19 +30,9 @@ const CarProfile = () => {
     }, [regNo]);
 
     const handleBookCar = () => {
-        // updates the car's status
-        updateCar (regNo, { status: "Booked" })
-            .then(() => {
-                setCar(prevState => ({
-                    ...prevState,
-                    status: "Booked"
-                }));
-                alert("Car has been booked!");
-            })
-            .catch(error => {
-                console.error("Error booking the car:", error);
-            });
+        navigate(`/bookcar/${regNo}`); // Redirect to the booking template page without changing the status
     };
+    
 
     return (
         console.log(car),
