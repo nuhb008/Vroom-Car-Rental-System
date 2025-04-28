@@ -24,44 +24,44 @@ public class BookingRepository {
 
     // Insert Booking
     public void saveBooking(Booking booking) {
-        String sql = "INSERT INTO bookings (regNo, fromDate, tillDate) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO booking (regNo, fromDate, tillDate) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, booking.getRegNo(), booking.getFromDate(), booking.getTillDate());
     }
 
     // Get All Bookings
     public List<Booking> getAllBookings() {
-        String sql = "SELECT * FROM bookings";
+        String sql = "SELECT * FROM booking";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     // Get Booking by ID
     public Booking getBookingById(int id) {
-        String sql = "SELECT * FROM bookings WHERE BID = ?";
+        String sql = "SELECT * FROM booking WHERE BID = ?";
         List<Booking> bookings = jdbcTemplate.query(sql, rowMapper, id);
         return bookings.isEmpty() ? null : bookings.get(0);
     }
 
     // Update Booking
     public void updateBooking(int id, Booking booking) {
-        String sql = "UPDATE bookings SET regNo = ?, fromDate = ?, tillDate = ? WHERE BID = ?";
+        String sql = "UPDATE booking SET regNo = ?, fromDate = ?, tillDate = ? WHERE BID = ?";
         jdbcTemplate.update(sql, booking.getRegNo(), booking.getFromDate(), booking.getTillDate(), id);
     }
 
     // Delete Booking
     public void deleteBooking(int id) {
-        String sql = "DELETE FROM bookings WHERE BID = ?";
+        String sql = "DELETE FROM booking WHERE BID = ?";
         jdbcTemplate.update(sql, id);
     }
 
     // Get Booking by regNo
     public List<Booking> getBookingsByRegNo(String regNo) {
-        String sql = "SELECT * FROM bookings WHERE regNo = ?";
+        String sql = "SELECT * FROM booking WHERE regNo = ?";
         return jdbcTemplate.query(sql, rowMapper, regNo);
     }
 
     // Get Booking by Date Range
     public List<Booking> getBookingsByDateRange(String regNo, java.sql.Date fromDate, java.sql.Date tillDate) {
-        String sql = "SELECT * FROM bookings WHERE regNo = ? AND fromDate >= ? AND tillDate <= ?";
+        String sql = "SELECT * FROM booking WHERE regNo = ? AND fromDate >= ? AND tillDate <= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, fromDate, tillDate);
     }
 }
