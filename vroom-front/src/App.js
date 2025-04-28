@@ -14,7 +14,6 @@ import CarsPage from "./pages/CarsPage";
 import CarForm from "./components/Cars/CarForm";
 import CarList from "./components/Cars/CarList";
 import CarProfile from "./components/Cars/CarProfile";
-
 function App() {
     return (
         <Router>
