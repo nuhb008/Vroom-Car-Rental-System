@@ -11,6 +11,9 @@ import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import CarsPage from "./pages/CarsPage";
+import CarForm from "./components/Cars/CarForm";
+import CarList from "./components/Cars/CarList";
+import CarProfile from "./components/Cars/CarProfile";
 
 function App() {
     return (
@@ -28,6 +31,11 @@ function App() {
 
                 <Route path="/login" element={<Login />} />
                 <Route path="/cars" element={<CarsPage />} />
+                <Route path="/cars/edit/:regNo" element={<CarForm />} />
+                <Route path="/cars/ownerlist" element={<CarList />} />
+                <Route path="/cars/profile/:regNo" element={<CarProfile />} />
+
+
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/customer" element={<CustomerDashboard />} />
