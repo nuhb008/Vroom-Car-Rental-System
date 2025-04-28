@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CarListAvailable from '../components/Cars/CarListAvailable';
-
+import CarBook from '../components/Cars/CarBook';
 const CustomerDashboard = () => {
   const [selectedOption, setSelectedOption] = useState('availableCars');
 
@@ -28,14 +28,14 @@ const CustomerDashboard = () => {
       <div style={styles.orangeNavbar}>
         <button style={styles.navButton} onClick={() => handleMenuClick('availableCars')}>Available Cars</button>
         <button style={styles.navButton} onClick={() => handleMenuClick('bookedCars')}>Booked Cars</button>
-        <button style={styles.navButton} onClick={() => handleMenuClick('myRentals')}>My Rentals</button>
+        <button style={styles.navButton} onClick={() => handleMenuClick('mypayments')}>Payments</button>
       </div>
 
       {/* Main Content */}
       <div style={styles.content}>
         {selectedOption === 'availableCars' && <CarListAvailable />}
-        {selectedOption === 'bookedCars' && <h2>Booked Cars Page (Coming Soon)</h2>}
-        {selectedOption === 'myRentals' && <h2>My Rentals Page (Coming Soon)</h2>}
+        {selectedOption === 'bookedCars' && <CarBook/>}
+        {selectedOption === 'mypayments' && <h2>Payment(Coming Soon)</h2>}
       </div>
     </div>
   );
