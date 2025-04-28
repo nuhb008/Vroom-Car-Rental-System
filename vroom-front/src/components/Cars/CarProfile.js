@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCarByRegNo, updateCar  } from "../../services/api";
+import { useAtom } from "jotai";
+import { userAtom } from "../../atoms/userAtom";
 
 const CarProfile = () => {
     const { regNo } = useParams(); // Always present
     const navigate = useNavigate();
+    const [user] = useAtom(userAtom) ;
 
     const [car, setCar] = useState({
         regNo: "",
@@ -52,6 +55,9 @@ const CarProfile = () => {
             </div>
             {car.status === "Available" && (
                 <button onClick={handleBookCar}>Book This Car</button>
+            )}
+            {user.role === "owner" && (
+                <button onClick={() => navigate(`/cars/edit/${car.regNo}`)}>Edit Car</button>
             )}
             <button onClick={() => navigate("/cars")}>Back to Cars List</button>
         </div>

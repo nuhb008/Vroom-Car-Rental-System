@@ -19,23 +19,38 @@ const Login = () => {
         username,
         password,
       });
-
-      setUser(response.data);
+  
+      const baseUser = response.data; // ✅ define baseUser here
       setError("");
-
+  
+      let role = "";
+  
       try {
-        const userResponse = await getUserById(response.data.uid);
+        const userResponse = await getUserById(baseUser.uid);
         const userDetails = userResponse.data;
+  
         if (userDetails.userType === 1) {
-          navigate("/customer");
+          role = "customer";
         } else if (userDetails.userType === 2) {
-          navigate("/owner");
+          role = "owner";
         } else {
-          navigate("/admin");
+          role = "admin";
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
         setError("Failed to fetch user details");
+      }
+  
+      const updatedUser = { ...baseUser, role }; // ✅ correct merge
+      setUser(updatedUser); // ✅ Save updated user
+  
+      // Navigate based on role
+      if (role === "customer") {
+        navigate("/customer");
+      } else if (role === "owner") {
+        navigate("/owner");
+      } else {
+        navigate("/admin");
       }
     } catch (error) {
       if (error.response?.status === 404 && error.response?.data) {
@@ -46,6 +61,7 @@ const Login = () => {
       }
     }
   };
+  
 
   return (
     <div style={styles.container}>
