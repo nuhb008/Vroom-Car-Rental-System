@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { deleteCar, getCarsByFuel, getCarsByStatus } from '../../services/api';
+import { getCarsByFuel, getCarsByStatus } from '../../services/api';
+import CarCard from '../../components/Cars/CarCard';
 
 const CarListAvailable = () => {
     const [fuelType, setFuelType] = useState("");
     const [cars, setCars] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCars();
@@ -21,12 +20,7 @@ const CarListAvailable = () => {
         }
     };
 
-    // const handleDelete = async (regNo) => {
-    //     await deleteCar(regNo);
-    //     fetchCars();
-    // };
-
-    const handleChange = async (e) => {
+    const handleChange = (e) => {
         setFuelType(e.target.value);
     }
 
@@ -45,24 +39,7 @@ const CarListAvailable = () => {
 
             <div style={styles.container}>
                 {cars.map((car) => (
-                    <div key={car.regNo} style={styles.card}>
-                        <h3>{car.model}</h3>
-                        <p><strong>Reg No:</strong> {car.regNo}</p>
-                        {/* <p><strong>Owner ID:</strong> {car.ownerId}</p>
-                        <p><strong>Capacity:</strong> {car.capacity}</p>
-                        <p><strong>Rate:</strong> {car.rate}</p>
-                        <p><strong>Status:</strong> {car.status}</p>
-                        <p><strong>Fuel Type:</strong> {car.fuelType}</p> */}
-
-                        <button style={styles.button} onClick={() => navigate(`/cars/profile/${car.regNo}`)}>
-                            Show Profile
-                        </button>
-
-                        {/* <button style={{ ...styles.button, backgroundColor: 'red', marginTop: '10px' }}
-                            onClick={() => handleDelete(car.regNo)}>
-                            Delete
-                        </button> */}
-                    </div>
+                    <CarCard key={car.regNo} car={car} /> // <-- Use CarCard here
                 ))}
             </div>
         </div>
@@ -74,22 +51,6 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
         gap: '20px',
-    },
-    card: {
-        backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        padding: '20px',
-        width: '250px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        textAlign: 'center',
-    },
-    button: {
-        padding: '10px 20px',
-        backgroundColor: '#007BFF',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
     },
 };
 

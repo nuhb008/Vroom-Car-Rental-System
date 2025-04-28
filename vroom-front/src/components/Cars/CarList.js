@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { useAtom } from 'jotai'
-import { useNavigate } from 'react-router-dom'
-import { userAtom } from '../../atoms/userAtom'
+import React, { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
+import { userAtom } from '../../atoms/userAtom';
 import { getCarsByOwner, deleteCar } from '../../services/api';
+import CarCard from '../../components/Cars/CarCard'; 
 
 const CarList = () => {
     const [user] = useAtom(userAtom);
@@ -19,46 +20,35 @@ const CarList = () => {
     };
 
     const handleDelete = async (regNo) => {
-        await deleteCar(regNo);
-        fetchCars();
+        if (window.confirm('Are you sure you want to delete this car?')) {
+            await deleteCar(regNo);
+            fetchCars();
+        }
     };
 
     return (
-        <div>
+        <div style={{ padding: '20px' }}>
             <h2>{user?.fullName}'s Cars List</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Registration</th>
-                        <th>OwnerId</th>
-                        <th>Model</th>
-                        <th>Capacity</th>
-                        <th>Rate</th>
-                        <th>Status</th>
-                        <th>Fuel</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cars.map((car) => (
-                        console.log(car),
-                        console.log(car.regNo),
-                        <tr key={car.regNo}>
-                            <td>{car.regNo}</td>
-                            <td>{car.ownerId}</td>
-                            <td>{car.model}</td>
-                            <td>{car.capacity}</td>
-                            <td>{car.rate}</td>
-                            <td>{car.status}</td>
-                            <td>{car.fuelType}</td>
-                            <td>
-                            <button onClick={() => navigate(`/cars/profile/${car.regNo}`)}>Show Profile</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+
+            <div style={styles.container}>
+                {cars.map((car) => (
+                    <CarCard 
+                        key={car.regNo} 
+                        car={car} 
+                        onDelete={() => handleDelete(car.regNo)} // Pass delete function
+                    />
+                ))}
+            </div>
         </div>
     );
-}
+};
+
+const styles = {
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '20px',
+    },
+};
 
 export default CarList;
