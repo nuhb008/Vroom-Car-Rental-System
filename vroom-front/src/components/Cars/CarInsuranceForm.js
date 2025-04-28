@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getCarByRegNo, updateCar } from "../../services/api";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CarForm = () => {
-    const { regNo } = useParams();
+const CarInsuranceForm = () => {
     const navigate = useNavigate();
 
     const [car, setCar] = useState({
@@ -16,34 +14,20 @@ const CarForm = () => {
         fuelType: ""
     });
 
-    useEffect(() => {
-        getCarByRegNo(regNo)
-            .then(response => {
-                setCar(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching car details:", error);
-            });
-    }, [regNo]);
-
     const handleChange = (e) => {
         setCar({ ...car, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        try {
-            await updateCar(regNo, car);
-            navigate("/cars");
-        } catch (error) {
-            console.error("Error updating car:", error);
-        }
+        console.log("Car to be added:", car); // Frontend only: Just log the form data
+        navigate("/cars"); // Navigate back after "submission"
     };
 
     return (
         <div style={styles.container}>
             <div style={styles.card}>
-                <h2 style={styles.title}>Edit Car Details</h2>
+                <h2 style={styles.title}>Add Insurance</h2>
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <input 
                         style={styles.input} 
@@ -53,7 +37,15 @@ const CarForm = () => {
                         onChange={handleChange} 
                         placeholder="Registration No" 
                         required 
-                        disabled
+                    />
+                    <input 
+                        style={styles.input} 
+                        type="text" 
+                        name="Insurance Id" 
+                        value={car.regNo} 
+                        onChange={handleChange} 
+                        placeholder="Insurance Id" 
+                        required 
                     />
                     <input 
                         style={styles.input} 
@@ -117,7 +109,7 @@ const CarForm = () => {
                     </select>
                     <div style={styles.buttonGroup}>
                         <button type="button" onClick={() => navigate("/cars")} style={styles.cancelButton}>Cancel</button>
-                        <button type="submit" style={styles.submitButton}>Update</button>
+                        <button type="submit" style={styles.submitButton}>Add Car</button>
                     </div>
                 </form>
             </div>
@@ -178,7 +170,7 @@ const styles = {
         cursor: "pointer",
     },
     submitButton: {
-        backgroundColor: "#28a745",
+        backgroundColor: "#007bff",
         color: "#ffffff",
         padding: "10px 20px",
         border: "none",
@@ -187,4 +179,4 @@ const styles = {
     },
 };
 
-export default CarForm;
+export default CarInsuranceForm;

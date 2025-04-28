@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import CarList from '../components/Cars/CarList';
+import CarForm from '../components/Cars/CarForm';
+import AddCarForm from '../components/Cars/AddCarForm';
+import CarInsuranceForm from '../components/Cars/CarInsuranceForm'; 
+
 
 const OwnerDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showAddCarForm, setShowAddCarForm] = useState(false);
+  const [currentView, setCurrentView] = useState('carList'); // <-- NEW state
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   const handleMenuClick = (option) => {
-    if (option === 'addCar') {
-      setShowAddCarForm(true);
-    }
+    setCurrentView(option); // Set the view based on clicked option
     setIsSidebarOpen(false); 
   };
 
   const closeForm = () => {
-    setShowAddCarForm(false);
+    setCurrentView('carList');
   };
 
   return (
@@ -35,40 +37,31 @@ const OwnerDashboard = () => {
         <div style={styles.sidebar}>
           <h3>Menu</h3>
           <button style={styles.menuButton} onClick={() => handleMenuClick('addCar')}>Add a Car</button>
-          <button style={styles.menuButton} onClick={() => alert('View Cars clicked!')}>View My Cars</button>
+          <button style={styles.menuButton} onClick={() => handleMenuClick('editCar')}>Edit a Car</button>
+          <button style={styles.menuButton} onClick={() => handleMenuClick('addinsurance')}>Add Insurance</button>
+          <button style={styles.menuButton} onClick={() => handleMenuClick('carList')}>View My Cars</button>
           {/* Add more options here */}
         </div>
       )}
 
       {/* Main Content */}
       <div style={styles.content}>
-        {!showAddCarForm ? (
+        {currentView === 'carList' && (
           <CarList />
-        ) : (
+        )}
+        {currentView === 'editCar' && (
           <div style={styles.formContainer}>
-            <h2>Add New Car</h2>
-            {/* Add Car Form */}
-            <form>
-              <div style={styles.inputGroup}>
-                <label>Model:</label>
-                <input type="text" placeholder="Enter model" />
-              </div>
-              <div style={styles.inputGroup}>
-                <label>Registration No:</label>
-                <input type="text" placeholder="Enter registration number" />
-              </div>
-              <div style={styles.inputGroup}>
-                <label>Fuel Type:</label>
-                <select>
-                  <option value="Petrol">Petrol</option>
-                  <option value="Diesel">Diesel</option>
-                  <option value="Electric">Electric</option>
-                </select>
-              </div>
-
-              <button type="submit" style={styles.submitButton}>Submit</button>
-              <button type="button" style={styles.closeButton} onClick={closeForm}>Cancel</button>
-            </form>
+            {<CarForm/>}
+          </div>
+        )}
+        {currentView === 'addCar' && (
+          <div style={styles.formContainer}>
+            {<AddCarForm/>}
+          </div>
+        )}
+        {currentView === 'addinsurance' && (
+          <div style={styles.formContainer}>
+            {<CarInsuranceForm/>}
           </div>
         )}
       </div>
