@@ -19,3 +19,6 @@ export const getCarsByFuel = async (fuel) => axios.get(`${API_URL}/cars/fueltype
 export const getAllCars = async () => axios.get(`${API_URL}/cars`);
 export const getCarByRegNo = async (regNo) => axios.get(`${API_URL}/cars/regno/${regNo}`);
 export const updateCar = async (regNo, car) => axios.put(`${API_URL}/cars/regno/${regNo}`, car);
+export const getAllBookings = async () => axios.get(`${API_URL}/bookings`);
+export const createBooking = async (booking) => axios.post(`${API_URL}/bookings`, booking);
+export const updateBooking = async (id, booking) => axios.put(`${API_URL}/bookings/${id}`, booking);

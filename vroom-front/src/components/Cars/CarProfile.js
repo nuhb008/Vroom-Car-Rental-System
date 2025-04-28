@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCarByRegNo } from "../../services/api";
+import { getCarByRegNo, updateCar  } from "../../services/api";
 
 const CarProfile = () => {
     const { regNo } = useParams(); // Always present
@@ -26,6 +26,21 @@ const CarProfile = () => {
             });
     }, [regNo]);
 
+    const handleBookCar = () => {
+        // updates the car's status
+        updateCar (regNo, { status: "Booked" })
+            .then(() => {
+                setCar(prevState => ({
+                    ...prevState,
+                    status: "Booked"
+                }));
+                alert("Car has been booked!");
+            })
+            .catch(error => {
+                console.error("Error booking the car:", error);
+            });
+    };
+
     return (
         console.log(car),
         console.log(regNo),
@@ -45,7 +60,9 @@ const CarProfile = () => {
                     <h3 style={{ color: "blue" }}>Car Status: Maintenance</h3>
                 )}
             </div>
-            <button>Book This Car</button>
+            {car.status === "Available" && (
+                <button onClick={handleBookCar}>Book This Car</button>
+            )}
             <button onClick={() => navigate("/cars")}>Back to Cars List</button>
         </div>
     );
