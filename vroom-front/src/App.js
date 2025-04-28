@@ -15,6 +15,9 @@ import CarForm from "./components/Cars/CarForm";
 import CarList from "./components/Cars/CarList";
 import CarProfile from "./components/Cars/CarProfile";
 import BookCar from "./pages/BookCar";
+
+import Payment from './pages/Payment';
+
 function App() {
     return (
         <Router>
@@ -35,6 +38,8 @@ function App() {
                 <Route path="/cars/ownerlist" element={<CarList />} />
                 <Route path="/cars/profile/:regNo" element={<CarProfile />} />
                 <Route path="/bookcar/:regNo" element={<BookCar />} />
+
+                <Route path="/payment" element={<Payment />} />
 
 
                 <Route path="/admin" element={<AdminDashboard />} />
