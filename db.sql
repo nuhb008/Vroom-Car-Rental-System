@@ -226,6 +226,7 @@ END //
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DELIMITER //
 
 CREATE PROCEDURE GetPaymentsByUserID(IN input_user_id INT)
@@ -240,19 +241,19 @@ DELIMITER ;
 
 
 DELIMITER //
-
 CREATE TRIGGER insurance_validation_trigger
 AFTER UPDATE ON insurance
 FOR EACH ROW
 BEGIN
+    -- Apply a 5% discount to the car's rate
     IF NEW.status = 'Valid' AND OLD.status = 'Invalid' THEN
         UPDATE cars
         SET rate = rate * 0.95
         WHERE regNo = NEW.regNo;
     END IF;
 END//
-
 DELIMITER ;
+
 
 -- First, let's check the current values before the update
 SELECT i.IID, i.regNo, i.status, c.rate
