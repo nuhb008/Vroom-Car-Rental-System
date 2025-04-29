@@ -75,4 +75,8 @@ public class InsuranceService {
         int rowsAffected = insuranceRepository.approveInsurance(id);
         return rowsAffected > 0;
     }
+
+    public void updateInsuranceStatus(int id, String status) {
+        insuranceRepository.updateInsuranceStatus(id, status);
+    }
 }

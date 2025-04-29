@@ -121,4 +121,4 @@ public class InsuranceRepository {
         return jdbcTemplate.update(sql, id);
     }
     
-}
+} 
