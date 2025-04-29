@@ -63,4 +63,8 @@ public class PaymentService {
     public List<Payment> getPaymentsByStatus(String status) {
         return paymentRepository.getPaymentsByStatus(status);
     }
+
+    public List<Payment> getPaymentsByCustomerId(int customerId) {
+        return paymentRepository.getPaymentsByUserID(customerId);
+    }
 }

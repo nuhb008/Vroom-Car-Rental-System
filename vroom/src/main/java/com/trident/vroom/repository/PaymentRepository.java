@@ -102,4 +102,11 @@ public class PaymentRepository {
         Double total = jdbcTemplate.queryForObject(sql, Double.class, rentId);
         return total != null ? total : 0.0;
     }
+
+    public List<Payment> getPaymentsByUserID(int customerId){
+        String sql = "CALL GetPaymentsByUserID(?);";
+        return jdbcTemplate.query(sql, rowMapper, customerId);
+    }
+
+
 }
