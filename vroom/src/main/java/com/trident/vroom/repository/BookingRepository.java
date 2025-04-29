@@ -71,9 +71,4 @@ public class BookingRepository {
         String sql = "SELECT * FROM booking WHERE regNo = ? AND fromDate >= ? AND tillDate <= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, fromDate, tillDate);
     }
-    
-    public String getBookingStatus(int bookingId) {
-        String sql = "CALL GetBookingStatus(?);";
-        return jdbcTemplate.queryForObject(sql, String.class, bookingId);
-    }
 }
