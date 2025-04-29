@@ -58,6 +58,14 @@ export const updateInsurance = async (id, insurance) => axios.put(`${API_URL}/in
 export const deleteInsurance = async (id) => axios.delete(`${API_URL}/insurances/${id}`);
 export const getInsuranceByRegNo = async (regNo) => axios.get(`${API_URL}/insurances/regno/${regNo}`);
 export const getInsuranceByStatus = async (status) => axios.get(`${API_URL}/insurances/status/${status}`);
+export const updateInsuranceStatus = async (id, status) => {
+  return axios.put(`${API_URL}/insurances/${id}/status`, JSON.stringify(status), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 
 // Rentals API
 export const getAllRentals = async () => axios.get(`${API_URL}/rentals`);
@@ -67,8 +75,7 @@ export const updateRental = async (id, rental) => axios.put(`${API_URL}/rentals/
 export const deleteRental = async (id) => axios.delete(`${API_URL}/rentals/${id}`);
 export const getRentalsByStatus = async (status) => axios.get(`${API_URL}/rentals/status/${status}`);
 export const getRentalsByCustomerId = async (customerId) => axios.get(`${API_URL}/rentals/customer/${customerId}`);
-export const updateInsuranceStatus = async (id, status) => 
-  axios.patch(`${API_URL}/insurances/${id}/status?status=${status}`);
+
 
 //Image APIs
 const IMAGE_API_URL = `${API_URL}/images`;

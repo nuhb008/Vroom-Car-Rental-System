@@ -2,6 +2,8 @@ package com.trident.vroom.controller;
 
 import com.trident.vroom.model.Insurance;
 import com.trident.vroom.service.InsuranceService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,6 +101,17 @@ public class InsuranceController {
         logger.warning("No insurances found with status: " + status);
         return ResponseEntity.notFound().build();
     }
-}
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateInsuranceStatus(@PathVariable int id, @RequestBody String status) {
+        try {
+            insuranceService.updateInsuranceStatus(id, status.replace("\"", "")); 
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Failed to update status: " + e.getMessage());
+        }
+    }
 
 }
