@@ -19,7 +19,8 @@ public class BookingRepository {
             rs.getInt("BID"),
             rs.getString("regNo"),
             rs.getDate("fromDate"),
-            rs.getDate("tillDate")
+            rs.getDate("tillDate"),
+            rs.getString("status")
     );
 
     // Insert Booking
@@ -69,5 +70,10 @@ public class BookingRepository {
     public List<Booking> getBookingsByDateRange(String regNo, java.sql.Date fromDate, java.sql.Date tillDate) {
         String sql = "SELECT * FROM booking WHERE regNo = ? AND fromDate >= ? AND tillDate <= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, fromDate, tillDate);
+    }
+    
+    public String getBookingStatus(int bookingId) {
+        String sql = "CALL GetBookingStatus(?);";
+        return jdbcTemplate.queryForObject(sql, String.class, bookingId);
     }
 }

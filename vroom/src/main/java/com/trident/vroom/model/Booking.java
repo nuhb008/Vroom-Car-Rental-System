@@ -11,4 +11,6 @@ public class Booking {
     private String regNo;
     private Date fromDate;
     private Date tillDate;
+
+    private String status; // ENUM ('Confirmed', 'Cancelled', 'Completed')
 }

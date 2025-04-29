@@ -218,12 +218,13 @@ DELIMITER //
 
 CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
 BEGIN
-    SELECT b.*
+    SELECT b.*, r.status
     FROM booking b
     JOIN rental r ON b.BID = r.BID
     WHERE r.customer_id = cust_id;
 END //
 
 DELIMITER ;
+
 
 
