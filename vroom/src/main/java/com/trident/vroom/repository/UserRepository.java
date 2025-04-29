@@ -60,5 +60,8 @@ public class UserRepository {
         List<User> users = jdbcTemplate.query(sql, rowMapper, username, password);
         return users.stream().findFirst();
     }
-    
+    public List<User> getHighestBookedCarByOwner(int UID) {
+        String sql = "CALL GetHighestBookedCarByOwner(?)";
+        return jdbcTemplate.query(sql, rowMapper, UID);
+    }
 }
