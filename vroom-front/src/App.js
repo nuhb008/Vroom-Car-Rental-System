@@ -17,7 +17,7 @@ import CarProfile from "./components/Cars/CarProfile";
 import BookCar from "./pages/BookCar";
 import BookList from "./components/Cars/BookList";
 import Payment from './pages/Payment';
-
+import PaymentForm from "./components/PaymentForm";
 import ImageManager from "./components/Images/ImageManager";
 
 function App() {
@@ -44,6 +44,8 @@ function App() {
 
 
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/make-payment/:pid" element={<PaymentForm />} />
+
 
 
                 <Route path="/admin" element={<AdminDashboard />} />
