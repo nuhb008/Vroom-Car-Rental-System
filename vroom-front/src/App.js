@@ -15,7 +15,7 @@ import CarForm from "./components/Cars/CarForm";
 import CarList from "./components/Cars/CarList";
 import CarProfile from "./components/Cars/CarProfile";
 import BookCar from "./pages/BookCar";
-import CarBook from "./components/Cars/CarBook";
+import CarBook from "./components/Cars/BookList";
 import Payment from './pages/Payment';
 
 function App() {

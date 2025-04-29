@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CarListAvailable from '../components/Cars/CarListAvailable';
-import CarBook from '../components/Cars/CarBook';
+import CarBook from '../components/Cars/BookList';
 import Payment from './Payment';
 const CustomerDashboard = () => {
   const [selectedOption, setSelectedOption] = useState('availableCars');
