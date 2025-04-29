@@ -58,7 +58,7 @@ const PaymentForm = () => {
     try {
       await updatePayment(pid, updatedPayment);
       setSuccess('Payment updated successfully!');
-      setTimeout(() => navigate('/payments'), 1500);
+      setTimeout(() => navigate('/payment'), 1500);
     } catch (err) {
       console.error(err);
       setError('Failed to update payment.');
