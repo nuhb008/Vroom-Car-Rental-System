@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCarByRegNo } from "../services/api";
+import { getCarByRegNo,createBooking } from "../services/api";
 
 const BookCar = () => {
   const { regNo } = useParams();
@@ -10,6 +10,7 @@ const BookCar = () => {
   const [carDetails, setCarDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +42,38 @@ const BookCar = () => {
       alert('Please select a valid date range.');
       setTotalPrice(0);
     }
+  };
+
+  const handleBooking = () => {
+    // Don't proceed if already submitting or if there's no valid total price
+    if (isSubmitting || totalPrice <= 0) return;
+    
+    setIsSubmitting(true);
+    
+    const bookingData = {
+      //carId: carDetails.id,
+      regNo: carDetails.regNo,
+      fromDate: startDate,
+      tillDate: endDate,
+      //totalAmount: totalPrice,
+      // Add any other required booking details here
+    };
+    
+    createBooking(bookingData)
+      .then(response => {
+        // Show success message
+        alert('Booking successful!');
+        // Redirect to the "My Booked" component
+        navigate('/car-bookings');
+
+      })
+      .catch(error => {
+        console.error("Error creating booking:", error);
+        alert('Failed to create booking. Please try again.');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   if (isLoading) {
@@ -144,15 +177,17 @@ const BookCar = () => {
             Cancel
           </button>
           <button 
+            onClick={handleBooking}
             style={{
               ...styles.submitButton,
-              backgroundColor: totalPrice <= 0 ? "#cccccc" : "#28a745",
-              cursor: totalPrice <= 0 ? "not-allowed" : "pointer"
+              backgroundColor: isSubmitting || totalPrice <= 0 ? "#cccccc" : "#28a745",
+              cursor: isSubmitting || totalPrice <= 0 ? "not-allowed" : "pointer"
             }}
-            disabled={totalPrice <= 0}
+            disabled={isSubmitting || totalPrice <= 0}
           >
-            Book Now
+            {isSubmitting ? "Processing..." : "Book Now"}
           </button>
+          
         </div>
       </div>
     </div>
