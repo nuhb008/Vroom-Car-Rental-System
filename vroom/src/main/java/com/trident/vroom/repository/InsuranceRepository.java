@@ -28,7 +28,7 @@ public class InsuranceRepository {
 
     // Insert Insurance
     public void saveInsurance(Insurance insurance) {
-        String sql = "INSERT INTO insurance (regNo, providerName, policyNumber, coverageAmount, startDate, endDate) " +
+        String sql = "INSERT INTO insurance (regNo, provider_name, policy_number, coverage_amount, start_date, end_date) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, insurance.getRegNo(), insurance.getProviderName(), insurance.getPolicyNumber(),
                 insurance.getCoverageAmount(), insurance.getStartDate(), insurance.getEndDate());

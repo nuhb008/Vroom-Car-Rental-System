@@ -45,7 +45,6 @@ public class InsuranceController {
     @PostMapping
     public ResponseEntity<Insurance> createInsurance(@RequestBody Insurance insurance) {
         insuranceService.createInsurance(insurance);
-        logger.info("Insurance created with ID: " + insurance.getIID());
         return ResponseEntity.ok(insurance);
     }
 

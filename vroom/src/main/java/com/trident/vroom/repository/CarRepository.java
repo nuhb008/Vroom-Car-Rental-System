@@ -4,6 +4,7 @@ import com.trident.vroom.model.Car;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,12 @@ public class CarRepository {
     // Insert Car
     public void saveCar(Car car) {
         String sql = "INSERT INTO cars (regNo, owner_id, model, capacity, rate, status, fuelType) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, car.getRegNo(), car.getOwnerId(), car.getModel(), car.getCapacity(), car.getRate(), car.getStatus(), car.getFuelType());
+        try {
+            jdbcTemplate.update(sql, car.getRegNo(), car.getOwnerId(), car.getModel(),
+                    car.getCapacity(), car.getRate(), car.getStatus(), car.getFuelType());
+        } catch (DuplicateKeyException e) {
+            throw new IllegalArgumentException("A car with the registration number " + car.getRegNo() + " already exists.");
+        }
     }
 
     // Get All Cars

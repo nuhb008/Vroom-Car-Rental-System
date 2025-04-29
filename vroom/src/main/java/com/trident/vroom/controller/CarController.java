@@ -2,6 +2,8 @@ package com.trident.vroom.controller;
 
 import com.trident.vroom.model.Car;
 import com.trident.vroom.service.CarService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,12 @@ public class CarController {
 
     public CarController(CarService carService) {
         this.carService = carService;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgumentException(IllegalArgumentException e) {
+        return e.getMessage();
     }
 
     @GetMapping

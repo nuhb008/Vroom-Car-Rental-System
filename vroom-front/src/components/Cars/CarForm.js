@@ -8,7 +8,6 @@ const CarForm = () => {
 
     const [car, setCar] = useState({
         regNo: "",
-        ownerId: "",
         model: "",
         capacity: "",
         rate: "",
@@ -54,15 +53,6 @@ const CarForm = () => {
                         placeholder="Registration No" 
                         required 
                         disabled
-                    />
-                    <input 
-                        style={styles.input} 
-                        type="text" 
-                        name="ownerId" 
-                        value={car.ownerId} 
-                        onChange={handleChange} 
-                        placeholder="Owner ID" 
-                        required 
                     />
                     <input 
                         style={styles.input} 
