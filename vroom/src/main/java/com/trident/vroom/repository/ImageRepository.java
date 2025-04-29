@@ -17,8 +17,8 @@ public class ImageRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
     public void save(Image image) {
-        String sql = "INSERT INTO carImages (name, type, data) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, image.getName(), image.getType(), image.getData());
+        String sql = "INSERT INTO carImages (regNo, name, type, data) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, image.getRegNo(), image.getName(), image.getType(), image.getData());
     }
 
     public Image findById(Long id) {

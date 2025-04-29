@@ -18,6 +18,8 @@ import BookCar from "./pages/BookCar";
 
 import Payment from './pages/Payment';
 
+import ImageManager from "./components/Images/ImageManager";
+
 function App() {
     return (
         <Router>
@@ -45,6 +47,9 @@ function App() {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/customer" element={<CustomerDashboard />} />
+                <Route path="/image-manager" element={<ImageManager />} />
+
+                {/* Add more routes as needed */}
             </Routes>
         </Router>
     );

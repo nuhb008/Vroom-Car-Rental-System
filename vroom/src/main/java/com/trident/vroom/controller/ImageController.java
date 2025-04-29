@@ -22,6 +22,20 @@ public class ImageController {
         this.imageService = imageService;
     }
 
+    @GetMapping("/view/{id}")
+    public ResponseEntity<byte[]> viewImage(@PathVariable Long id) {
+        Image image = imageService.getImageById(id);
+        if (image != null) {
+            return ResponseEntity.ok()
+                    .header("Content-Type", image.getType()) // Sets the correct image type (e.g., image/jpeg)
+                    .body(image.getData());
+        } else {
+            logger.warning("Image not found with ID: " + id);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @GetMapping
     public ResponseEntity<List<Image>> getAllImages() {
         List<Image> images = imageService.getAllImages();
