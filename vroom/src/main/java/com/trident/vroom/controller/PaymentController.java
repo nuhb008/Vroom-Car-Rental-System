@@ -89,4 +89,14 @@ public class PaymentController {
         List<Payment> payments = paymentService.getPaymentsByDateRange(new Date(start.getTime()), new Date(end.getTime()));
         return payments.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(payments);
     }
+
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<List<Payment>> getPaymentsByCustomerId(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(paymentService.getPaymentsByCustomerId(id));
+        } catch (RuntimeException e) {
+            logger.warning(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

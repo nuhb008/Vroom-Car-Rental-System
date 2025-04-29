@@ -12,5 +12,5 @@ public class Booking {
     private Date fromDate;
     private Date tillDate;
 
-    private String status; // ENUM ('Confirmed', 'Cancelled', 'Completed')
+    private String status; 
 }

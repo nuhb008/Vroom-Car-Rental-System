@@ -42,6 +42,7 @@ export const deletePayment = async (id) => axios.delete(`${API_URL}/payments/${i
 export const getPaymentsByRentId = async (rentId) => axios.get(`${API_URL}/payments/rent/${rentId}`);
 export const getPaymentsByDateRange = async (startDate, endDate) =>axios.get(`${API_URL}/payments/daterange?start=${startDate}&end=${endDate}`);
 export const getPaymentsByStatus = async (status) => axios.get(`${API_URL}/payments/status/${status}`);
+export const getPaymentsByCustomerId = async (customerId) => axios.get(`${API_URL}/payments/customer/${customerId}`);
 
 // INSURANCE APIs
 export const getAllInsurance = async () => axios.get(`${API_URL}/insurance`);
