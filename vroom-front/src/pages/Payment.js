@@ -89,7 +89,7 @@ const Payment = () => {
                       <td style={styles.td}>{rental.rentID}</td>
                       <td style={styles.td}>{payment.pid}</td>
                       <td style={styles.td}>{payment.amount}</td>
-                      <td style={styles.td}>{payment.payment_method }</td>
+                      <td style={styles.td}>{payment.paymentMethod }</td>
                       <td
                         style={{
                           ...styles.td,
@@ -103,7 +103,17 @@ const Payment = () => {
                       >
                         {payment.status}
                       </td>
-                      <td style={styles.td}>{payment.payment_date}</td>
+                      <td style={styles.td}>
+                      {payment.paymentDate}{' '}
+                      {(payment.status === 'Pending' || payment.status === 'Failed') && (
+                        <button
+                          style={styles.payButton}
+                          onClick={() => window.location.href = `/make-payment/${payment.pid}`}
+                        >
+                          Pay Now
+                        </button>
+                      )}
+                    </td>
                     </tr>
                   ))
                 ) : (
@@ -137,6 +147,16 @@ const styles = {
   title: {
     fontSize: '24px',
     fontWeight: 'bold',
+  },
+  payButton: {
+    marginLeft: '10px',
+    padding: '5px 10px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
   },
   loadingContainer: {
     display: 'flex',
