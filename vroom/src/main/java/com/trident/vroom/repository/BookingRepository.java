@@ -6,6 +6,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+
 import com.trident.vroom.model.Booking;
 
 @Repository
@@ -24,10 +30,22 @@ public class BookingRepository {
     );
 
     // Insert Booking
-    public void saveBooking(Booking booking) {
+    public int saveBooking(Booking booking) {
         String sql = "INSERT INTO booking (regNo, fromDate, tillDate) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, booking.getRegNo(), booking.getFromDate(), booking.getTillDate());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+    
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, booking.getRegNo());
+            ps.setDate(2, new java.sql.Date(booking.getFromDate().getTime()));
+            ps.setDate(3, new java.sql.Date(booking.getTillDate().getTime()));
+            return ps;
+        }, keyHolder);
+    
+        return keyHolder.getKey().intValue(); // Returns the generated BID
     }
+    
+
 
     // Get All Bookings
     public List<Booking> getAllBookings() {
@@ -71,4 +89,11 @@ public class BookingRepository {
         String sql = "SELECT * FROM booking WHERE regNo = ? AND fromDate >= ? AND tillDate <= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, fromDate, tillDate);
     }
+
+    //Get latest booking by regNo
+    public Booking getLatestBookingByRegNo(String regNo) {
+        String sql = "CALL GetLatestBookingByRegNo(?)";
+        List<Booking> bookings = jdbcTemplate.query(sql, rowMapper, regNo);
+        return bookings.isEmpty() ? null : bookings.get(0);
+    }    
 }

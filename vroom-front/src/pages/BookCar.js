@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCarByRegNo,createBooking } from "../services/api";
+import { getCarByRegNo,createBooking, getLatestBookingByRegNo, updateRentalByBID } from "../services/api";
+import { useAtom } from "jotai";
+import { userAtom } from "../atoms/userAtom";
 
 const BookCar = () => {
   const { regNo } = useParams();
+  const [initialDate, setInitialDate] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
@@ -12,6 +15,7 @@ const BookCar = () => {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [user] = useAtom(userAtom); // Assuming you have a user atom to get the current user
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,6 +30,20 @@ const BookCar = () => {
         console.error("Error fetching car details:", error);
         setError("Failed to load car details. Please try again.");
         setIsLoading(false);
+      });
+
+    getLatestBookingByRegNo(regNo)
+      .then(response => {
+        if (response.data) {
+          const latestBooking = response.data;
+          setInitialDate(latestBooking.tillDate);
+        }
+        else {
+          setInitialDate(new Date().toISOString().split('T')[0]);
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching latest booking:", error);
       });
   }, [regNo]);
 
@@ -58,13 +76,22 @@ const BookCar = () => {
       //totalAmount: totalPrice,
       // Add any other required booking details here
     };
-    
+
+    const rentalData = {
+      rentID: '',
+      BID: '',
+      customerId: user.uid,
+      totalAmount: '',
+      status: '',
+    };
+
     createBooking(bookingData)
       .then(response => {
         // Show success message
         alert('Booking successful!');
         // Redirect to the "My Booked" component
-        navigate('/car-bookings');
+        updateRentalByBID(response.data.bid, rentalData)
+        navigate('/dashboard');
 
       })
       .catch(error => {
@@ -100,6 +127,13 @@ const BookCar = () => {
     );
   }
 
+  const getLatestDate = (...dates) => {
+    const validDates = dates.filter(Boolean).map(date => new Date(date));
+    if (validDates.length === 0) return new Date().toISOString().split('T')[0];
+    const latest = new Date(Math.max(...validDates));
+    return latest.toISOString().split('T')[0];
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.card}>
@@ -129,10 +163,10 @@ const BookCar = () => {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             style={styles.input}
-            min={new Date().toISOString().split('T')[0]}
+            min={getLatestDate(initialDate, new Date())}
           />
         </div>
-        
+
         <div style={styles.formGroup}>
           <label style={styles.label}>End Date:</label>
           <input 
@@ -140,7 +174,7 @@ const BookCar = () => {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
             style={styles.input}
-            min={startDate || new Date().toISOString().split('T')[0]}
+            min={getLatestDate(initialDate, startDate, new Date())}
           />
         </div>
         

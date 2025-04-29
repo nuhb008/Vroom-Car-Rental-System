@@ -87,4 +87,15 @@ public class RentalController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/bid/{bid}")
+    public ResponseEntity<Rental> updateRentalCustomerId(@PathVariable int bid, @RequestBody Rental rental) {
+        Rental updated = rentalService.updateCustomerId(bid, rental.getCustomerId());
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

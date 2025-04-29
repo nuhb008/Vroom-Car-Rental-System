@@ -28,9 +28,10 @@ public class BookingService {
     }
 
     public Booking createBooking(Booking booking) {
-        bookingRepository.saveBooking(booking);
+        int generatedId = bookingRepository.saveBooking(booking); // assumes this returns BID
+        booking.setBID(generatedId);
         return booking;
-    }
+    }    
 
     public Booking updateBooking(int id, Booking booking) {
         Booking existingBooking = bookingRepository.getBookingById(id);
@@ -48,5 +49,9 @@ public class BookingService {
 
     public List<Booking> getBookingsByRegNo(String regNo) {
         return bookingRepository.getBookingsByRegNo(regNo);
+    }
+
+    public Booking getLatestBookingByRegNo(String regNo) {
+        return bookingRepository.getLatestBookingByRegNo(regNo);
     }
 }

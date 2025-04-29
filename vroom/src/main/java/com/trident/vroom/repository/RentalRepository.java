@@ -43,6 +43,13 @@ public class RentalRepository {
         return rentals.isEmpty() ? null : rentals.get(0);
     }
 
+    // Get Rental by BID
+    public Rental getRentalByBID(int bid) {
+        String sql = "SELECT * FROM rental WHERE BID = ?";
+        List<Rental> rentals = jdbcTemplate.query(sql, rowMapper, bid);
+        return rentals.isEmpty() ? null : rentals.get(0);
+    }
+
     // Update Rental
     public void updateRental(int id, Rental rental) {
         String sql = "UPDATE rental SET BID = ?, customer_id = ?, totalAmount = ?, status = ? WHERE rentID = ?";
@@ -67,7 +74,15 @@ public class RentalRepository {
         return jdbcTemplate.query(sql, rowMapper, customerId);
     }
     
-   
+    // Update Rental BID
+    public Rental updateCustomerIdByBid(int bid, int customerId) {
+        String sql = "UPDATE rental SET customer_id = ? WHERE BID = ?";
+        int rows = jdbcTemplate.update(sql, customerId, bid);
+        if (rows > 0) {
+            return getRentalByBID(bid); // Or just return a new Rental with updated values
+        }
+        return null;
+    }    
 
     
 }

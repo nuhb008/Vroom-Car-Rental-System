@@ -11,7 +11,7 @@ function VerifyPayment() {
     const [payments, setPayments] = useState([]);
     useEffect(() => {
       if (user?.uid) {
-        fetchPaymentsByCustomerId(user.uid);
+        fetchPaymentsByCustomerId(2);
       }
     }, [user?.uid]);
     

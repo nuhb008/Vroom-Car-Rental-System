@@ -54,10 +54,11 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
-        bookingService.createBooking(booking);
-        logger.info("Booking created with ID: " + booking.getBID());
-        return ResponseEntity.ok(booking);
+        Booking savedBooking = bookingService.createBooking(booking); // must return the booking with BID
+        logger.info("Booking created with ID: " + savedBooking.getBID());
+        return ResponseEntity.ok(savedBooking);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Booking> updateBooking(@PathVariable int id, @RequestBody Booking booking) {
@@ -84,6 +85,17 @@ public class BookingController {
             return ResponseEntity.ok(bookings);
         } else {
             logger.warning("No bookings found for Registration Number: " + regNo);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/latest/{regNo}")
+    public ResponseEntity<Booking> getLatestBookingByRegNo(@PathVariable String regNo) {
+        Booking booking = bookingService.getLatestBookingByRegNo(regNo);
+        if (booking != null) {
+            return ResponseEntity.ok(booking);
+        } else {
+            logger.warning("Booking not found with regNo: " + regNo);
             return ResponseEntity.notFound().build();
         }
     }
