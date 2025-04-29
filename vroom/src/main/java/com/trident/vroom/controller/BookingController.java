@@ -30,6 +30,17 @@ public class BookingController {
         return ResponseEntity.ok(bookings);
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Booking>> getBookingsByCustomerId(@PathVariable int customerId) {
+        List<Booking> bookings = bookingService.getBookingsByCustomerId(customerId);
+        if (!bookings.isEmpty()) {
+            return ResponseEntity.ok(bookings);
+        } else {
+            logger.warning("No bookings found for Customer ID: " + customerId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Booking> getBookingById(@PathVariable int id) {
         Booking booking = bookingService.getBookingById(id);
