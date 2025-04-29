@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCarByRegNo, updateCar  } from "../../services/api";
+import { getCarByRegNo } from "../../services/api";
 import { useAtom } from "jotai";
 import { userAtom } from "../../atoms/userAtom";
 
 const CarProfile = () => {
-    const { regNo } = useParams(); // Always present
+    const { regNo } = useParams();
     const navigate = useNavigate();
-    const [user] = useAtom(userAtom) ;
+    const [user] = useAtom(userAtom);
 
     const [car, setCar] = useState({
         regNo: "",
@@ -30,37 +30,141 @@ const CarProfile = () => {
     }, [regNo]);
 
     const handleBookCar = () => {
-        navigate(`/bookcar/${regNo}`); // Redirect to the booking template page without changing the status
+        navigate(`/bookcar/${regNo}`);
     };
-    
 
     return (
-        console.log(car),
-        console.log(regNo),
-        <div>
-            <h2>Car Profile</h2>
-            <div>
-                <h3>Car Registration No: {car.regNo}</h3>
-                <h3>Car Model: {car.model}</h3>
-                <h3>Car Capacity: {car.capacity}</h3>
-                <h3>Car Rate: {car.rate}</h3>
-                <h3>Car Fuel Type: {car.fuelType}</h3>
-                {car.status === "Available" ? (
-                    <h3 style={{ color: "green" }}>Car Status: Available</h3>
-                ) : car.status === "Booked" ? (
-                    <h3 style={{ color: "red" }}>Car Status: Booked</h3>
-                ) : (
-                    <h3 style={{ color: "blue" }}>Car Status: Maintenance</h3>
-                )}
+        <div style={styles.container}>
+            <div style={styles.card}>
+                <h2 style={styles.title}>Car Details</h2>
+                <div style={styles.detailsContainer}>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Registration No:</span>
+                        <span style={styles.value}>{car.regNo}</span>
+                    </div>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Model:</span>
+                        <span style={styles.value}>{car.model}</span>
+                    </div>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Capacity:</span>
+                        <span style={styles.value}>{car.capacity} persons</span>
+                    </div>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Rate:</span>
+                        <span style={styles.value}>${car.rate} per day</span>
+                    </div>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Fuel Type:</span>
+                        <span style={styles.value}>{car.fuelType}</span>
+                    </div>
+                    <div style={styles.detailItem}>
+                        <span style={styles.label}>Status:</span>
+                        <span style={{
+                            ...styles.value,
+                            color: car.status === "Available" ? "#28a745" : 
+                                  car.status === "Booked" ? "#dc3545" : "#007bff"
+                        }}>
+                            {car.status}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style={styles.buttonGroup}>
+                    <button 
+                        onClick={() => navigate("/cars")} 
+                        style={styles.cancelButton}>
+                        Back to Cars List
+                    </button>
+                    
+                    {user.role === "owner" && (
+                        <button 
+                            onClick={() => navigate(`/cars/edit/${car.regNo}`)} 
+                            style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
+                            Edit Car
+                        </button>
+                    )}
+                    
+                    {car.status === "Available" && (
+                        <button 
+                            onClick={handleBookCar} 
+                            style={styles.submitButton}>
+                            Book This Car
+                        </button>
+                    )}
+                </div>
             </div>
-            {car.status === "Available" && (
-                <button onClick={handleBookCar}>Book This Car</button>
-            )}
-            {user.role === "owner" && (
-                <button onClick={() => navigate(`/cars/edit/${car.regNo}`)}>Edit Car</button>
-            )}
-            <button onClick={() => navigate("/cars")}>Back to Cars List</button>
         </div>
     );
-}
+};
+
+const styles = {
+    container: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "90vh",
+        backgroundColor: "#f8f9fa",
+    },
+    card: {
+        backgroundColor: "#ffffff",
+        padding: "30px",
+        borderRadius: "12px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+        width: "100%",
+        maxWidth: "600px",
+    },
+    title: {
+        textAlign: "center",
+        marginBottom: "30px",
+        color: "#333333",
+        borderBottom: "1px solid #eee",
+        paddingBottom: "15px",
+    },
+    detailsContainer: {
+        marginBottom: "30px",
+    },
+    detailItem: {
+        display: "flex",
+        borderBottom: "1px solid #f0f0f0",
+        padding: "12px 0",
+    },
+    label: {
+        fontWeight: "bold",
+        width: "40%",
+        color: "#555",
+    },
+    value: {
+        width: "60%",
+    },
+    buttonGroup: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: "20px",
+    },
+    cancelButton: {
+        backgroundColor: "#6c757d",
+        color: "#ffffff",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+    },
+    actionButton: {
+        color: "#000000",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+    },
+    submitButton: {
+        backgroundColor: "#007bff",
+        color: "#ffffff",
+        padding: "10px 20px",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer",
+    },
+};
+
 export default CarProfile;
