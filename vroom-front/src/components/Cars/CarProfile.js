@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCarByRegNo } from "../../services/api";
+import { getCarByRegNo, deleteCar } from "../../services/api";
 import { useAtom } from "jotai";
 import { userAtom } from "../../atoms/userAtom";
 
@@ -31,6 +31,13 @@ const CarProfile = () => {
 
     const handleBookCar = () => {
         navigate(`/bookcar/${regNo}`);
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm('Are you sure you want to delete this car?')) {
+            await deleteCar(regNo);
+            navigate("/dashboard");
+        }
     };
 
     return (
@@ -72,24 +79,32 @@ const CarProfile = () => {
                 
                 <div style={styles.buttonGroup}>
                     <button 
-                        onClick={() => navigate("/cars")} 
+                        onClick={() => navigate("/dashboard")} 
                         style={styles.cancelButton}>
-                        Back to Cars List
+                        Back to Dashboard
                     </button>
                     
                     {user.role === "owner" && (
                         <button 
                             onClick={() => navigate(`/cars/edit/${car.regNo}`)} 
                             style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
-                            Edit Car
+                            Edit
                         </button>
                     )}
                     
-                    {car.status === "Available" && (
+                    {car.status === "Available" && user.role === "customer" && (
                         <button 
                             onClick={handleBookCar} 
                             style={styles.submitButton}>
                             Book This Car
+                        </button>
+                    )}
+
+                    {user.role === "owner" && (
+                        <button 
+                            onClick={() => handleDelete()} 
+                            style={{...styles.actionButton, backgroundColor: "#dc3545"}}>
+                            Delete
                         </button>
                     )}
                 </div>
@@ -151,7 +166,7 @@ const styles = {
         cursor: "pointer",
     },
     actionButton: {
-        color: "#000000",
+        color: "#ffffff",
         padding: "10px 20px",
         border: "none",
         borderRadius: "6px",

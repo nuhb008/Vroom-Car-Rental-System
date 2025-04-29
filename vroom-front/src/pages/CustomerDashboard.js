@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import CarListAvailable from '../components/Cars/CarListAvailable';
-import CarBook from '../components/Cars/BookList';
+import BookList from '../components/Cars/BookList';
 import Payment from './Payment';
+
 const CustomerDashboard = () => {
   const [selectedOption, setSelectedOption] = useState('availableCars');
 
@@ -35,7 +36,7 @@ const CustomerDashboard = () => {
       {/* Main Content */}
       <div style={styles.content}>
         {selectedOption === 'availableCars' && <CarListAvailable />}
-        {selectedOption === 'bookedCars' && <CarBook/>}
+        {selectedOption === 'bookedCars' && <BookList/>}
         {selectedOption === 'mypayments' && <Payment />}
       </div>
     </div>
