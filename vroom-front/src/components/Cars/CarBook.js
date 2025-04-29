@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../../services/api';
-
+import { useNavigate } from 'react-router-dom';
 const CarBook = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchBookings();
   }, []);
@@ -19,6 +20,16 @@ const CarBook = () => {
       console.error("Error fetching bookings:", error);
       setLoading(false);
     }
+  };
+
+  const handlePaymentClick = (bookingId, amount) => {
+    // Navigate to the payment page with booking details
+    navigate(`/payment/${bookingId}`, { 
+      state: { 
+        bookingId, 
+        amount
+      }
+    });
   };
   
   if (loading) {
@@ -75,6 +86,14 @@ const CarBook = () => {
                   </div>
                 )}
               </div>
+              {booking.status === "Pending" && booking.totalAmount && (
+                <button 
+                  style={styles.paymentButton}
+                  onClick={() => handlePaymentClick(booking.bid, booking.totalAmount)}
+                >
+                  Pay Now
+                </button>
+              )}
             </div>
           ))}
         </div>
