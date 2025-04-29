@@ -19,6 +19,7 @@ import BookList from "./components/Cars/BookList";
 import Payment from './pages/Payment';
 import PaymentForm from "./components/PaymentForm";
 import ImageManager from "./components/Images/ImageManager";
+import CarInsuranceForm from "./components/Cars/CarInsuranceForm";
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/cars" element={<CarsPage />} />
                 <Route path="/cars/edit/:regNo" element={<CarForm />} />
+                <Route path="/insurance/add/:regNo" element={<CarInsuranceForm />} />
                 <Route path="/cars/ownerlist" element={<CarList />} />
                 <Route path="/cars/profile/:regNo" element={<CarProfile />} />
                 <Route path="/bookcar/:regNo" element={<BookCar />} />

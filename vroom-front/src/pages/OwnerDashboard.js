@@ -37,8 +37,6 @@ const OwnerDashboard = () => {
         <div style={styles.sidebar}>
           <h3>Menu</h3>
           <button style={styles.menuButton} onClick={() => handleMenuClick('addCar')}>Add a Car</button>
-          <button style={styles.menuButton} onClick={() => handleMenuClick('editCar')}>Edit a Car</button>
-          <button style={styles.menuButton} onClick={() => handleMenuClick('addinsurance')}>Add Insurance</button>
           <button style={styles.menuButton} onClick={() => handleMenuClick('carList')}>View My Cars</button>
           {/* Add more options here */}
         </div>

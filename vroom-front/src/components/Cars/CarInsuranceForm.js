@@ -1,28 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCarByRegNo, updateCar,  } from "../../services/api";
+import { createInsurance } from "../../services/api"; 
+
 
 const CarInsuranceForm = () => {
+    const { regNo } = useParams();
     const navigate = useNavigate();
 
     const [car, setCar] = useState({
         regNo: "",
-        ownerId: "",
-        model: "",
-        capacity: "",
-        rate: "",
-        status: "",
-        fuelType: ""
+        ProviderName: "",
+        PolicyNumber: "",
+        CoverageAmount: "",
+        StartDate: "",
+        EndDate: ""
     });
+
+    useEffect(() => {
+        getCarByRegNo(regNo)
+            .then(response => {
+                setCar(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching car details:", error);
+            });
+    }, [regNo]);
 
     const handleChange = (e) => {
         setCar({ ...car, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Car to be added:", car); // Frontend only: Just log the form data
-        navigate("/cars"); // Navigate back after "submission"
+        try {
+            const insurance = {
+                regNo: car.regNo,
+                providerName: car.ProviderName,
+                policyNumber: car.PolicyNumber,
+                coverageAmount: car.CoverageAmount,
+                startDate: car.StartDate,
+                endDate: car.EndDate
+            };
+            await createInsurance(insurance);
+            navigate("/cars");
+        } catch (error) {
+            console.error("Error adding insurance:", error);
+        }
     };
+    
 
     return (
         <div style={styles.container}>
@@ -37,79 +63,56 @@ const CarInsuranceForm = () => {
                         onChange={handleChange} 
                         placeholder="Registration No" 
                         required 
+                        disabled
                     />
                     <input 
                         style={styles.input} 
                         type="text" 
-                        name="Insurance Id" 
-                        value={car.regNo} 
+                        name="ProviderName" 
+                        value={car.ProviderName} 
                         onChange={handleChange} 
-                        placeholder="Insurance Id" 
+                        placeholder="Provider Name" 
                         required 
                     />
                     <input 
                         style={styles.input} 
                         type="text" 
-                        name="ownerId" 
-                        value={car.ownerId} 
+                        name="PolicyNumber" 
+                        value={car.PolicyNumber} 
                         onChange={handleChange} 
-                        placeholder="Owner ID" 
-                        required 
-                    />
-                    <input 
-                        style={styles.input} 
-                        type="text" 
-                        name="model" 
-                        value={car.model} 
-                        onChange={handleChange} 
-                        placeholder="Model" 
+                        placeholder="Policy Number" 
                         required 
                     />
                     <input 
                         style={styles.input} 
                         type="number" 
-                        name="capacity" 
-                        value={car.capacity} 
+                        name="CoverageAmount" 
+                        value={car.CoverageAmount} 
                         onChange={handleChange} 
-                        placeholder="Capacity" 
+                        placeholder="Coverage Amount" 
                         required 
                     />
                     <input 
                         style={styles.input} 
-                        type="number" 
-                        name="rate" 
-                        value={car.rate} 
+                        type="date" 
+                        name="StartDate" 
+                        value={car.StartDate} 
                         onChange={handleChange} 
-                        placeholder="Rate per day" 
+                        placeholder="Start Date" 
                         required 
                     />
-                    <select 
-                        style={styles.select} 
-                        name="status" 
-                        value={car.status} 
+                    <input 
+                        style={styles.input} 
+                        type="date" 
+                        name="EndDate" 
+                        value={car.EndDate} 
                         onChange={handleChange} 
-                        required
-                    >
-                        <option value="">Select Status</option>
-                        <option value="Available">Available</option>
-                        <option value="Booked">Booked</option>
-                        <option value="Maintenance">Maintenance</option>
-                    </select>
-                    <select 
-                        style={styles.select} 
-                        name="fuelType" 
-                        value={car.fuelType} 
-                        onChange={handleChange} 
-                        required
-                    >
-                        <option value="">Select Fuel Type</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Electric">Electric</option>
-                    </select>
+                        placeholder="End Date" 
+                        required 
+                    />
                     <div style={styles.buttonGroup}>
                         <button type="button" onClick={() => navigate("/cars")} style={styles.cancelButton}>Cancel</button>
-                        <button type="submit" style={styles.submitButton}>Add Car</button>
+                        <button type="submit" style={styles.submitButton}>Add</button>
                     </div>
                 </form>
             </div>
@@ -170,7 +173,7 @@ const styles = {
         cursor: "pointer",
     },
     submitButton: {
-        backgroundColor: "#007bff",
+        backgroundColor: "#28a745",
         color: "#ffffff",
         padding: "10px 20px",
         border: "none",
