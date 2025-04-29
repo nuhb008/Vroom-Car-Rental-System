@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createCar } from "../../services/api"; 
 
 const AddCarForm = () => {
     const navigate = useNavigate();
@@ -18,10 +19,18 @@ const AddCarForm = () => {
         setCar({ ...car, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Car to be added:", car); // Frontend only: Just log the form data
-        navigate("/cars"); // Navigate back after "submission"
+        try {
+            const { ownerId, ...carData } = car;
+            await createCar(ownerId, carData);
+            alert("Car added successfully!");
+            navigate("/cars");
+        } catch (error) {
+            console.error("Error adding car:", error);
+            alert("Failed to add car. " + (error.response?.data || ""));
+
+        }
     };
 
     return (

@@ -23,6 +23,15 @@ export const getAllBookings = async () => axios.get(`${API_URL}/bookings`);
 export const createBooking = async (booking) => axios.post(`${API_URL}/bookings`, booking);
 export const updateBooking = async (id, booking) => axios.put(`${API_URL}/bookings/${id}`, booking);
 export const getCustomerBookings = async (customerId) => axios.get(`${API_URL}/bookings/customer/${customerId}`);
+export const createCar = async (ownerId, car) => {
+  try {
+      const response = await axios.post(`${API_URL}/cars/${ownerId}`, car);
+      return response.data;
+  } catch (error) {
+      console.error("Error creating car:", error);
+      throw error;
+  }
+};
 
 //Payment APIs
 export const getAllPayments = async () => axios.get(`${API_URL}/payments`);
