@@ -28,7 +28,7 @@ public class InsuranceRepository {
 
     // Insert Insurance
     public void saveInsurance(Insurance insurance) {
-        String sql = "INSERT INTO insurances (regNo, providerName, policyNumber, coverageAmount, startDate, endDate) " +
+        String sql = "INSERT INTO insurance (regNo, providerName, policyNumber, coverageAmount, startDate, endDate) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, insurance.getRegNo(), insurance.getProviderName(), insurance.getPolicyNumber(),
                 insurance.getCoverageAmount(), insurance.getStartDate(), insurance.getEndDate());
@@ -36,20 +36,20 @@ public class InsuranceRepository {
 
     // Get All Insurances
     public List<Insurance> getAllInsurances() {
-        String sql = "SELECT * FROM insurances";
+        String sql = "SELECT * FROM insurance";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     // Get Insurance by ID
     public Insurance getInsuranceById(int id) {
-        String sql = "SELECT * FROM insurances WHERE IID = ?";
+        String sql = "SELECT * FROM insurance WHERE IID = ?";
         List<Insurance> result = jdbcTemplate.query(sql, rowMapper, id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     // Update Insurance
     public void updateInsurance(int id, Insurance insurance) {
-        String sql = "UPDATE insurances SET regNo = ?, providerName = ?, policyNumber = ?, coverageAmount = ?, startDate = ?, endDate = ? " +
+        String sql = "UPDATE insurance SET regNo = ?, providerName = ?, policyNumber = ?, coverageAmount = ?, startDate = ?, endDate = ? " +
                      "WHERE IID = ?";
         jdbcTemplate.update(sql, insurance.getRegNo(), insurance.getProviderName(), insurance.getPolicyNumber(),
                 insurance.getCoverageAmount(), insurance.getStartDate(), insurance.getEndDate(), id);
@@ -57,7 +57,7 @@ public class InsuranceRepository {
 
     // Delete Insurance
     public void deleteInsurance(int id) {
-        String sql = "DELETE FROM insurances WHERE IID = ?";
+        String sql = "DELETE FROM insurance WHERE IID = ?";
         jdbcTemplate.update(sql, id);
     }
 
@@ -69,7 +69,7 @@ public class InsuranceRepository {
 
     // Get Insurance active in a given date
     public List<Insurance> getInsurancesActiveOnDate(String regNo, Date date) {
-        String sql = "SELECT * FROM insurances WHERE regNo = ? AND startDate <= ? AND endDate >= ?";
+        String sql = "SELECT * FROM insurance WHERE regNo = ? AND startDate <= ? AND endDate >= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, date, date);
     }
 }

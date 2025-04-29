@@ -107,6 +107,14 @@ const CarProfile = () => {
                             Delete
                         </button>
                     )}
+                    {user.role === "owner" && (
+                        <button 
+                            onClick={() => navigate(`/insurance/add/${car.regNo}`)} 
+                            style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
+                            Add Insurance
+                        </button>
+                    )}
+
                 </div>
             </div>
         </div>
