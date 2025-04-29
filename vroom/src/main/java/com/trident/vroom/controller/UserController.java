@@ -74,4 +74,12 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @GetMapping("/high/{id}")
+    public ResponseEntity<List<User>>getHighestBookedCarByOwner(@PathVariable int id) {
+        //List<User> user = userService.getHighestBookedCarByOwner(id);
+         return ResponseEntity.ok(userService.getHighestBookedCarByOwner(id));
+                   
+    }
+
 }
