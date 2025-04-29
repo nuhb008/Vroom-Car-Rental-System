@@ -21,15 +21,15 @@ public class PaymentRepository {
             rs.getInt("PID"),
             rs.getInt("rentID"),
             rs.getDouble("amount"),
-            rs.getDate("paymentDate"),
-            rs.getString("paymentMethod"),
+            rs.getDate("payment_date"),
+            rs.getString("payment_method"),
             rs.getString("status"),
             rs.getString("transactionID")
     );
 
     // Insert Payment
     public void savePayment(Payment payment) {
-        String sql = "INSERT INTO payment (rentID, amount, paymentDate, paymentMethod, status, transactionID) " +
+        String sql = "INSERT INTO payment (rentID, amount, payment_date, payment_method, status, transactionID) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 payment.getRentID(),
@@ -55,8 +55,8 @@ public class PaymentRepository {
 
     // Update Payment
     public void updatePayment(int id, Payment payment) {
-        String sql = "UPDATE payment SET rentID = ?, amount = ?, paymentDate = ?, " +
-                     "paymentMethod = ?, status = ?, transactionID = ? WHERE PID = ?";
+        String sql = "UPDATE payment SET rentID = ?, amount = ?, payment_date = ?, " +
+                     "payment_method = ?, status = ?, transactionID = ? WHERE PID = ?";
         jdbcTemplate.update(sql,
                 payment.getRentID(),
                 payment.getAmount(),
@@ -81,7 +81,7 @@ public class PaymentRepository {
 
     // Get Payments by Date Range
     public List<Payment> getPaymentsByDateRange(Date startDate, Date endDate) {
-        String sql = "SELECT * FROM payment WHERE paymentDate BETWEEN ? AND ?";
+        String sql = "SELECT * FROM payment WHERE payment_date BETWEEN ? AND ?";
         return jdbcTemplate.query(sql, rowMapper, startDate, endDate);
     }
 
@@ -89,5 +89,17 @@ public class PaymentRepository {
     public List<Payment> getPaymentsByStatus(String status) {
         String sql = "SELECT * FROM payment WHERE status = ?";
         return jdbcTemplate.query(sql, rowMapper, status);
+    }
+
+    public double getTotalPaymentAmount() {
+        String sql = "SELECT SUM(amount) FROM payment";
+        Double total = jdbcTemplate.queryForObject(sql, Double.class);
+        return total != null ? total : 0.0;
+    }
+
+    public double getTotalPaymentAmountByRentId(int rentId) {
+        String sql = "SELECT SUM(amount) FROM payment WHERE rentID = ?";
+        Double total = jdbcTemplate.queryForObject(sql, Double.class, rentId);
+        return total != null ? total : 0.0;
     }
 }

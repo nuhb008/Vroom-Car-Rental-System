@@ -15,28 +15,28 @@ public class UserDetailsController {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    // ✅ Get UserDetails by ID
+    // Get UserDetails by ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDetails> getUserDetailsById(@PathVariable int id) {
         UserDetails userDetails = userDetailsService.getUserDetailsByUid(id);
         return (userDetails != null) ? ResponseEntity.ok(userDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // ✅ Create UserDetails
+    // Create UserDetails
     @PostMapping
     public ResponseEntity<String> createUserDetails(@RequestBody UserDetails userDetails) {
         userDetailsService.createUserDetails(userDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body("User details created successfully!");
     }
 
-    // ✅ Update UserDetails
+    // Update UserDetails
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUserDetails(@PathVariable int id, @RequestBody UserDetails userDetails) {
         UserDetails updatedUserDetails = userDetailsService.updateUserDetails(id, userDetails);
         return (updatedUserDetails != null) ? ResponseEntity.ok(updatedUserDetails) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
     }
 
-    // ✅ Delete UserDetails
+    // Delete UserDetails
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUserDetails(@PathVariable int id) {
         userDetailsService.deleteUserDetails(id);
