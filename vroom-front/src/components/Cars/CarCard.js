@@ -1,31 +1,48 @@
-// src/components/CarCard.jsx
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const CarCard = ({ car,onDelete }) => {
+import { getImagesByRegNo, viewImage } from "../../services/api";
+const CarCard = ({ car, onDelete }) => {
     const navigate = useNavigate();
+    const [imageSrc, setImageSrc] = useState(null);
+
+    useEffect(() => {
+        const fetchImageByRegNo = async () => {
+            try {
+                const imageResponse = await getImagesByRegNo(car.regNo);
+                if (imageResponse.data.length > 0) {
+                    const imageId = imageResponse.data[0].id;
+                    const binaryImage = await viewImage(imageId);
+                    const base64 = btoa(
+                        new Uint8Array(binaryImage.data).reduce(
+                            (data, byte) => data + String.fromCharCode(byte),
+                            ''
+                        )
+                    );
+                    const mimeType = binaryImage.headers['content-type'];
+                    setImageSrc(`data:${mimeType};base64,${base64}`);
+                }
+            } catch (error) {
+                console.error("Failed to fetch image:", error);
+            }
+        };
+
+        fetchImageByRegNo();
+    }, [car.regNo]);
 
     return (
         <div style={styles.card}>
+            {imageSrc && (
+                <img
+                    src={imageSrc}
+                    alt={car.model}
+                    style={styles.image}
+                />
+            )}
             <h3>{car.model}</h3>
             <p><strong>Reg No:</strong> {car.regNo}</p>
-
-            {/* You can show more details if needed */}
-            {/* <p><strong>Fuel Type:</strong> {car.fuelType}</p> */}
-
             <button style={styles.button} onClick={() => navigate(`/cars/profile/${car.regNo}`)}>
                 Show Profile
             </button>
-              {/* Only show delete button if onDelete prop exists */}
-            {/* {onDelete && (
-                <button 
-                    style={{ ...styles.button, backgroundColor: 'red', marginTop: '10px' }} 
-                    onClick={onDelete}
-                >
-                    Delete
-                </button>
-            )} */}
         </div>
     );
 };
@@ -48,6 +65,15 @@ const styles = {
         cursor: 'pointer',
         marginTop: '10px',
     },
+    image: {
+        width: "100%",
+        height: "200px",            
+        objectFit: "cover",         
+        borderRadius: "10px",
+        display: "block",           
+        marginBottom: "10px",
+    },
+    
 };
 
 export default CarCard;

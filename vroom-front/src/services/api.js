@@ -24,7 +24,7 @@ export const createBooking = async (booking) => axios.post(`${API_URL}/bookings`
 export const updateBooking = async (id, booking) => axios.put(`${API_URL}/bookings/${id}`, booking);
 export const getCustomerBookings = async (customerId) => axios.get(`${API_URL}/bookings/customer/${customerId}`);
 
-
+//Payment APIs
 export const getAllPayments = async () => axios.get(`${API_URL}/payments`);
 export const getPaymentById = async (id) => axios.get(`${API_URL}/payments/${id}`);
 export const createPayment = async (payment) => axios.post(`${API_URL}/payments`, payment);
@@ -50,3 +50,25 @@ export const updateRental = async (id, rental) => axios.put(`${API_URL}/rentals/
 export const deleteRental = async (id) => axios.delete(`${API_URL}/rentals/${id}`);
 export const getRentalsByStatus = async (status) => axios.get(`${API_URL}/rentals/status/${status}`);
 export const getRentalsByCustomerId = async (customerId) => axios.get(`${API_URL}/rentals/customer/${customerId}`);
+
+//Image APIs
+const IMAGE_API_URL = `${API_URL}/images`;
+
+export const uploadImage = async (regNo, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return axios.post(`${IMAGE_API_URL}/upload/${regNo}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+export const getAllImages = async () => axios.get(`${IMAGE_API_URL}`);
+export const getImageById = async (id) => axios.get(`${IMAGE_API_URL}/${id}`);
+export const viewImage = async (id) => axios.get(`${IMAGE_API_URL}/view/${id}`, {
+  responseType: 'arraybuffer', // For rendering image binary as base64
+});
+export const getImagesByRegNo = async (regNo) => axios.get(`${IMAGE_API_URL}/regNo/${regNo}`);
+export const updateImage = async (id, imageData) => axios.put(`${IMAGE_API_URL}/${id}`, imageData);
+export const deleteImage = async (id) => axios.delete(`${IMAGE_API_URL}/${id}`);
