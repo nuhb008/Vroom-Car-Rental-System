@@ -16,6 +16,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 DROP PROCEDURE IF EXISTS GetBookingsByCustomerId;
 DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DROP PROCEDURE IF EXISTS GetLatestBookingByRegNo;
+DROP PROCEDURE IF EXISTS GetRentalWithRemainingByBID;
 
 DROP FUNCTION IF EXISTS CalculateTotalAmount;
 DROP FUNCTION IF EXISTS GetRemainingAmount;
@@ -330,6 +331,23 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetRentalWithRemainingByBID(IN booking_id INT)
+BEGIN
+    SELECT 
+        r.rentID,
+        r.BID,
+        r.customer_id,
+        GetRemainingAmount(r.rentID) AS totalAmount,
+        r.status
+    FROM rental r
+    WHERE r.BID = booking_id;
+END //
+
+DELIMITER ;
+
 
 DELIMITER //
 

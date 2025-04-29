@@ -62,6 +62,7 @@ export const updateRentalByBID = async (bid, rental) => axios.put(`${API_URL}/re
 export const deleteRental = async (id) => axios.delete(`${API_URL}/rentals/${id}`);
 export const getRentalsByStatus = async (status) => axios.get(`${API_URL}/rentals/status/${status}`);
 export const getRentalsByCustomerId = async (customerId) => axios.get(`${API_URL}/rentals/customer/${customerId}`);
+export const getRentalRemainBID = async (bid) => axios.get(`${API_URL}/rentals/bid-remain/${bid}`);
 
 //Image APIs
 const IMAGE_API_URL = `${API_URL}/images`;

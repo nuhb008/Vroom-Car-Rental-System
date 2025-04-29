@@ -84,15 +84,23 @@ const Payment = () => {
                     {payment.status}
                   </td>
                   <td style={styles.td}>
-                    {payment.paymentDate}{' '}
                     {(payment.status === 'Pending' || payment.status === 'Failed') && (
-                      <button
-                        style={styles.payButton}
-                        onClick={() => window.location.href = `/make-payment/${payment.pid}`}
-                      >
-                        Pay Now
-                      </button>
-                    )}
+                    <button
+                      style={{
+                        ...styles.payButton,
+                        opacity: payment.status === 'Pending' ? 0.5 : 1,
+                        cursor: payment.status === 'Pending' ? 'not-allowed' : 'pointer',
+                      }}
+                      disabled={payment.status === 'Pending'}
+                      onClick={() => {
+                        if (payment.status !== 'Pending') {
+                          window.location.href = `/make-payment/${payment.pid}`;
+                        }
+                      }}
+                    >
+                      Pay Now
+                    </button>
+                  )}
                   </td>
                 </tr>
               ))}

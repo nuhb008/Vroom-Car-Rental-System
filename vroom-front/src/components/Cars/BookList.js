@@ -75,9 +75,9 @@ const BookList = () => {
                   <span style={styles.label}>Status:</span>
                   <span style={{
                     ...styles.value,
-                    color: booking.status === "Confirmed" ? "#28a745" : 
-                           booking.status === "Pending" ? "#ffc107" : 
-                           booking.status === "Cancelled" ? "#dc3545" : "#007bff"
+                    color: booking.status === "Paid" ? "#28a745" : 
+                          //  booking.status === "Pending" ? "#ffc107" : 
+                           booking.status === "Unpaid" ? "#dc3545" : "#007bff"
                   }}>
                     {booking.status}
                   </span>
@@ -90,7 +90,7 @@ const BookList = () => {
                   </div>
                 )}
               </div>
-              {booking.status === "Pending" && booking.totalAmount && (
+              {booking.status === "Unpaid" && (
                 <button 
                   style={styles.paymentButton}
                   onClick={() => handlePaymentClick(booking.bid, booking.totalAmount)}

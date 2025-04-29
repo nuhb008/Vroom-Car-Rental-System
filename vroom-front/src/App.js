@@ -20,6 +20,7 @@ import Payment from './pages/Payment';
 import PaymentForm from "./components/PaymentForm";
 import ImageManager from "./components/Images/ImageManager";
 import CarInsuranceForm from "./components/Cars/CarInsuranceForm";
+import PaymentFormBook from "./components/PaymentFormBook";
 
 function App() {
     return (
@@ -47,6 +48,7 @@ function App() {
 
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/make-payment/:pid" element={<PaymentForm />} />
+                <Route path="/make-payment-book/:bid" element={<PaymentFormBook />} />
 
 
 

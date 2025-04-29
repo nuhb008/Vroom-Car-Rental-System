@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Logger;
 
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/rentals")
@@ -98,4 +99,25 @@ public class RentalController {
         }
     }
 
+    @GetMapping("/bid/{bid}")
+    public ResponseEntity<Rental> getRentalByBookingId(@PathVariable int bid) {
+        Rental rental = rentalService.getRentalByBookingId(bid);
+        if (rental != null) {
+            return ResponseEntity.ok(rental);
+        } else {
+            logger.warning("Rental not found with BID: " + bid);
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/bid-remain/{bid}")
+    public ResponseEntity<Rental> getRentalRemainByBookingId(@PathVariable int bid) {
+        Rental rental = rentalService.getRentalRemainByBookingId(bid);
+        if (rental != null) {
+            return ResponseEntity.ok(rental);
+        } else {
+            logger.warning("Rental not found with BID: " + bid);
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

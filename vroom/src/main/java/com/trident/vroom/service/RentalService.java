@@ -63,5 +63,12 @@ public class RentalService {
     public Rental updateCustomerId(int bid, Integer customerId) {
         return rentalRepository.updateCustomerIdByBid(bid, customerId);
     }
+
+    public Rental getRentalByBookingId(int bid) {
+        return rentalRepository.getRentalByBID(bid);
+    }
     
+    public Rental getRentalRemainByBookingId(int bid) {
+        return rentalRepository.getRentalRemainByBID(bid);
+    }
 }
