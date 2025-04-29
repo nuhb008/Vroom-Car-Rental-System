@@ -18,6 +18,7 @@ DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DROP PROCEDURE IF EXISTS GetLatestBookingByRegNo;
 
 DROP FUNCTION IF EXISTS CalculateTotalAmount;
+DROP FUNCTION IF EXISTS GetRemainingAmount;
 DROP TRIGGER IF EXISTS after_booking_insert;
 
 
@@ -265,17 +266,7 @@ INSERT INTO payment (rentID, amount, payment_date, payment_method, status, trans
 
 -- Functions and Procedures
 -- ===============================================================
-DELIMITER //
 
-CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
-BEGIN
-    SELECT b.*, r.status
-    FROM booking b
-    JOIN rental r ON b.BID = r.BID
-    WHERE r.customer_id = cust_id;
-END //
-
-DELIMITER ;
 
 DELIMITER //
 
@@ -317,9 +308,43 @@ END //
 
 DELIMITER ;
 
--- Functions and Procedures
--- ===============================================================
+DELIMITER //
 
+CREATE FUNCTION GetRemainingAmount(rent_id INT) RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE total_paid DECIMAL(10,2);
+    DECLARE total_due DECIMAL(10,2);
+
+    SELECT IFNULL(SUM(p.amount), 0)
+    INTO total_paid
+    FROM payment p
+    WHERE p.rentID = rent_id AND p.status = 'Paid';
+
+    SELECT r.totalAmount
+    INTO total_due
+    FROM rental r
+    WHERE r.rentID = rent_id;
+
+    RETURN total_due - total_paid;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
+BEGIN
+    SELECT b.*, IF(GetRemainingAmount(r.rentID) = 0, 'Paid', 'Unpaid') AS status
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE r.customer_id = cust_id;
+END //
+
+DELIMITER ;
+
+-- Triggers
+-- ===============================================================
 DELIMITER //
 
 CREATE TRIGGER after_booking_insert
@@ -340,6 +365,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
 
 
 
