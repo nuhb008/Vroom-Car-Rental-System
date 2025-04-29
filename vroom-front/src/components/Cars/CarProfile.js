@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCarByRegNo, deleteCar } from "../../services/api";
 import { useAtom } from "jotai";
 import { userAtom } from "../../atoms/userAtom";
-
+import { getImagesByRegNo, viewImage } from "../../services/api";
 const CarProfile = () => {
     const { regNo } = useParams();
     const navigate = useNavigate();
@@ -19,6 +19,8 @@ const CarProfile = () => {
         fuelType: ""
     });
 
+    const [imageSrc, setImageSrc] = useState(null);
+
     useEffect(() => {
         getCarByRegNo(regNo)
             .then(response => {
@@ -27,94 +29,122 @@ const CarProfile = () => {
             .catch(error => {
                 console.error("Error fetching car details:", error);
             });
-    }, [regNo]);
 
-    const handleBookCar = () => {
-        navigate(`/bookcar/${regNo}`);
-    };
-
-    const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this car?')) {
-            await deleteCar(regNo);
-            navigate("/dashboard");
-        }
-    };
-
-    return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Car Details</h2>
-                <div style={styles.detailsContainer}>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Registration No:</span>
-                        <span style={styles.value}>{car.regNo}</span>
-                    </div>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Model:</span>
-                        <span style={styles.value}>{car.model}</span>
-                    </div>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Capacity:</span>
-                        <span style={styles.value}>{car.capacity} persons</span>
-                    </div>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Rate:</span>
-                        <span style={styles.value}>${car.rate} per day</span>
-                    </div>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Fuel Type:</span>
-                        <span style={styles.value}>{car.fuelType}</span>
-                    </div>
-                    <div style={styles.detailItem}>
-                        <span style={styles.label}>Status:</span>
-                        <span style={{
-                            ...styles.value,
-                            color: car.status === "Available" ? "#28a745" : 
-                                  car.status === "Booked" ? "#dc3545" : "#007bff"
-                        }}>
-                            {car.status}
-                        </span>
-                    </div>
-                </div>
+        const fetchImage = async () => {
+            try {
+                const imageList = await getImagesByRegNo(regNo);
+                if (imageList.data.length > 0) {
+                    const imageId = imageList.data[0].id;
+                    const imageResponse = await viewImage(imageId);
+                    const base64 = btoa(
+                        new Uint8Array(imageResponse.data).reduce(
+                            (data, byte) => data + String.fromCharCode(byte),
+                            ""
+                        )
+                    );
+                    const mimeType = imageResponse.headers['content-type'];
+                    setImageSrc(`data:${mimeType};base64,${base64}`);
+                }
+                    } catch (err) {
+                        console.error("Error fetching image:", err);
+                    }
+                        };
+                    
+                        fetchImage();
+                    }, [regNo]);
                 
-                <div style={styles.buttonGroup}>
+                    const handleBookCar = () => {
+                        navigate(`/bookcar/${regNo}`);
+                    };
+                
+                    const handleDelete = async () => {
+                        if (window.confirm('Are you sure you want to delete this car?')) {
+                            await deleteCar(regNo);
+                            navigate("/dashboard");
+                        }
+                    };
+                
+        return (
+                <div style={styles.container}>
+                    <div style={styles.card}>
+                        <h2 style={styles.title}>Car Details</h2>
+                        {imageSrc && (
+                <img
+                    src={imageSrc}
+                    alt="Car"
+                    style={styles.image}
+                />
+            )}
+            
+            <div style={styles.detailsContainer}>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Registration No:</span>
+                    <span style={styles.value}>{car.regNo}</span>
+                </div>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Model:</span>
+                    <span style={styles.value}>{car.model}</span>
+                </div>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Capacity:</span>
+                    <span style={styles.value}>{car.capacity} persons</span>
+                </div>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Rate:</span>
+                    <span style={styles.value}>${car.rate} per day</span>
+                </div>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Fuel Type:</span>
+                    <span style={styles.value}>{car.fuelType}</span>
+                </div>
+                <div style={styles.detailItem}>
+                    <span style={styles.label}>Status:</span>
+                    <span style={{
+                        ...styles.value,
+                        color: car.status === "Available" ? "#28a745" : 
+                              car.status === "Booked" ? "#dc3545" : "#007bff"
+                    }}>
+                        {car.status}
+                    </span>
+                </div>
+            </div>
+            
+            <div style={styles.buttonGroup}>
+                <button 
+                    onClick={() => navigate("/dashboard")} 
+                    style={styles.cancelButton}>
+                    Back to Dashboard
+                </button>
+                
+                {user.role === "owner" && (
                     <button 
-                        onClick={() => navigate("/dashboard")} 
-                        style={styles.cancelButton}>
-                        Back to Dashboard
+                        onClick={() => navigate(`/cars/edit/${car.regNo}`)} 
+                        style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
+                        Edit
                     </button>
-                    
-                    {user.role === "owner" && (
-                        <button 
-                            onClick={() => navigate(`/cars/edit/${car.regNo}`)} 
-                            style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
-                            Edit
-                        </button>
-                    )}
-                    
-                    {car.status === "Available" && user.role === "customer" && (
-                        <button 
-                            onClick={handleBookCar} 
-                            style={styles.submitButton}>
-                            Book This Car
-                        </button>
-                    )}
-
-                    {user.role === "owner" && (
-                        <button 
-                            onClick={() => handleDelete()} 
-                            style={{...styles.actionButton, backgroundColor: "#dc3545"}}>
-                            Delete
-                        </button>
-                    )}
-                    {user.role === "owner" && (
-                        <button 
-                            onClick={() => navigate(`/insurance/add/${car.regNo}`)} 
-                            style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
-                            Add Insurance
-                        </button>
-                    )}
-
+                )}
+                
+                {car.status === "Available" && user.role === "customer" && (
+                    <button 
+                        onClick={handleBookCar} 
+                        style={styles.submitButton}>
+                        Book This Car
+                    </button>
+                )}
+                {user.role === "owner" && (
+                    <button 
+                        onClick={() => handleDelete()} 
+                        style={{...styles.actionButton, backgroundColor: "#dc3545"}}>
+                        Delete
+                    </button>
+                )}
+                {user.role === "owner" && (
+                    <button 
+                        onClick={() => navigate(`/insurance/add/${car.regNo}`)} 
+                        style={{...styles.actionButton, backgroundColor: "#ffc107"}}>
+                        Add Insurance
+                    </button>
+                )}
                 </div>
             </div>
         </div>
@@ -188,6 +218,15 @@ const styles = {
         borderRadius: "6px",
         cursor: "pointer",
     },
+    image: {
+        width: "100%",
+        height: "200px",            
+        objectFit: "cover",         
+        borderRadius: "10px",
+        display: "block",           
+        marginBottom: "10px",
+    }
+    
 };
 
 export default CarProfile;
