@@ -6,11 +6,14 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS userDetails;
 DROP TABLE IF EXISTS cars;
+DROP TABLE IF EXISTS carImages;
 DROP TABLE IF EXISTS insurance;
 DROP TABLE IF EXISTS payment;
 DROP TABLE IF EXISTS rental;
 DROP TABLE IF EXISTS booking;
 SET FOREIGN_KEY_CHECKS = 1;
+
+DROP PROCEDURE IF EXISTS GetBookingsByCustomerId;
 
 -- DDLs
 -- ===============================================================
@@ -40,6 +43,15 @@ CREATE TABLE IF NOT EXISTS cars (
     fuelType ENUM ('Petrol', 'Diesel', 'Electric') NOT NULL,
     FOREIGN KEY (owner_id) REFERENCES users(UID) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (regNo)
+);
+
+CREATE TABLE carImages (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    regNo VARCHAR(20) NOT NULL, 
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    data LONGBLOB NOT NULL,
+    FOREIGN KEY (regNo) REFERENCES cars(regNo) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS booking (
@@ -199,6 +211,20 @@ INSERT INTO payment (rentID, amount, payment_date, payment_method, status, trans
 (14, 220.00, '2025-03-14', 'Bank Transfer', 'Paid', 'TXN136'),
 (15, 210.00, '2025-03-15', 'Cash', 'Paid', 'TXN137');
 
+
+-- Functions and Procedures
+-- ===============================================================
+DELIMITER //
+
+CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
+BEGIN
+    SELECT b.*, r.status
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE r.customer_id = cust_id;
+END //
+
+DELIMITER ;
 
 
 

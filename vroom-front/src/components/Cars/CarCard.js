@@ -18,14 +18,14 @@ const CarCard = ({ car,onDelete }) => {
                 Show Profile
             </button>
               {/* Only show delete button if onDelete prop exists */}
-            {onDelete && (
+            {/* {onDelete && (
                 <button 
                     style={{ ...styles.button, backgroundColor: 'red', marginTop: '10px' }} 
                     onClick={onDelete}
                 >
                     Delete
                 </button>
-            )}
+            )} */}
         </div>
     );
 };

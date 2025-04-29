@@ -15,8 +15,10 @@ import CarForm from "./components/Cars/CarForm";
 import CarList from "./components/Cars/CarList";
 import CarProfile from "./components/Cars/CarProfile";
 import BookCar from "./pages/BookCar";
-import CarBook from "./components/Cars/BookList";
+import BookList from "./components/Cars/BookList";
 import Payment from './pages/Payment';
+
+import ImageManager from "./components/Images/ImageManager";
 
 function App() {
     return (
@@ -38,7 +40,7 @@ function App() {
                 <Route path="/cars/ownerlist" element={<CarList />} />
                 <Route path="/cars/profile/:regNo" element={<CarProfile />} />
                 <Route path="/bookcar/:regNo" element={<BookCar />} />
-                <Route path="/car-bookings" element={<CarBook />} />
+                <Route path="/car-bookings" element={<BookList />} />
 
 
                 <Route path="/payment" element={<Payment />} />
@@ -47,6 +49,9 @@ function App() {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/customer" element={<CustomerDashboard />} />
+                <Route path="/image-manager" element={<ImageManager />} />
+
+                {/* Add more routes as needed */}
             </Routes>
         </Router>
     );
