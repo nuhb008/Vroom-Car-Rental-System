@@ -19,6 +19,10 @@ public class BookingService {
         return bookingRepository.getAllBookings();
     }
 
+    public List<Booking> getBookingsByCustomerId(int customerId) {
+        return bookingRepository.getBookingsByCustomerId(customerId);
+    }
+
     public Booking getBookingById(int id) {
         return bookingRepository.getBookingById(id);
     }

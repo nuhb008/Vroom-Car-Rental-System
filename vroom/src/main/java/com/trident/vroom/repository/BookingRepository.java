@@ -34,6 +34,12 @@ public class BookingRepository {
         return jdbcTemplate.query(sql, rowMapper);
     }
 
+    //Get booking by customer ID
+    public List<Booking> getBookingsByCustomerId(int customerId) {
+        String sql = "CALL GetBookingsByCustomerId(?);";
+        return jdbcTemplate.query(sql, rowMapper, customerId);
+    }
+
     // Get Booking by ID
     public Booking getBookingById(int id) {
         String sql = "SELECT * FROM booking WHERE BID = ?";

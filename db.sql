@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS rental;
 DROP TABLE IF EXISTS booking;
 SET FOREIGN_KEY_CHECKS = 1;
 
+DROP PROCEDURE IF EXISTS GetBookingsByCustomerId;
+
 -- DDLs
 -- ===============================================================
 CREATE TABLE users (
@@ -210,5 +212,18 @@ INSERT INTO payment (rentID, amount, payment_date, payment_method, status, trans
 (15, 210.00, '2025-03-15', 'Cash', 'Paid', 'TXN137');
 
 
+-- Functions and Procedures
+-- ===============================================================
+DELIMITER //
+
+CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
+BEGIN
+    SELECT b.*
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE r.customer_id = cust_id;
+END //
+
+DELIMITER ;
 
 
