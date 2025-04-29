@@ -51,12 +51,13 @@ export const getPaymentsByStatus = async (status) => axios.get(`${API_URL}/payme
 export const getPaymentsByCustomerId = async (customerId) => axios.get(`${API_URL}/payments/customer/${customerId}`);
 
 // INSURANCE APIs
-export const getAllInsurance = async () => axios.get(`${API_URL}/insurance`);
-export const getInsuranceById = async (id) => axios.get(`${API_URL}/insurance/${id}`);
+export const getAllInsurance = async () => axios.get(`${API_URL}/insurances`);
+export const getInsuranceById = async (id) => axios.get(`${API_URL}/insurances/${id}`);
 export const createInsurance = async (insurance) => axios.post(`${API_URL}/insurances`, insurance);
-export const updateInsurance = async (id, insurance) => axios.put(`${API_URL}/insurance/${id}`, insurance);
-export const deleteInsurance = async (id) => axios.delete(`${API_URL}/insurance/${id}`);
-export const getInsuranceByRegNo = async (regNo) => axios.get(`${API_URL}/insurance/regno/${regNo}`);
+export const updateInsurance = async (id, insurance) => axios.put(`${API_URL}/insurances/${id}`, insurance);
+export const deleteInsurance = async (id) => axios.delete(`${API_URL}/insurances/${id}`);
+export const getInsuranceByRegNo = async (regNo) => axios.get(`${API_URL}/insurances/regno/${regNo}`);
+export const getInsuranceByStatus = async (status) => axios.get(`${API_URL}/insurances/status/${status}`);
 
 // Rentals API
 export const getAllRentals = async () => axios.get(`${API_URL}/rentals`);
@@ -66,6 +67,8 @@ export const updateRental = async (id, rental) => axios.put(`${API_URL}/rentals/
 export const deleteRental = async (id) => axios.delete(`${API_URL}/rentals/${id}`);
 export const getRentalsByStatus = async (status) => axios.get(`${API_URL}/rentals/status/${status}`);
 export const getRentalsByCustomerId = async (customerId) => axios.get(`${API_URL}/rentals/customer/${customerId}`);
+export const updateInsuranceStatus = async (id, status) => 
+  axios.patch(`${API_URL}/insurances/${id}/status?status=${status}`);
 
 //Image APIs
 const IMAGE_API_URL = `${API_URL}/images`;

@@ -14,4 +14,5 @@ public class Insurance {
     private double coverageAmount;
     private Date startDate;
     private Date endDate;
+    private String status; // ENUM ('Valid', 'Invalid')
 }

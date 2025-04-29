@@ -89,4 +89,16 @@ public class InsuranceController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Insurance>> getInsurancesByStatus(@PathVariable String status) {
+    List<Insurance> insurances = insuranceService.getInsurancesByStatus(status);
+    if (!insurances.isEmpty()) {
+        return ResponseEntity.ok(insurances);
+    } else {
+        logger.warning("No insurances found with status: " + status);
+        return ResponseEntity.notFound().build();
+    }
+}
+
 }
