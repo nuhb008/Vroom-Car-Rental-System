@@ -21,6 +21,10 @@ import PaymentForm from "./components/PaymentForm";
 import ImageManager from "./components/Images/ImageManager";
 import CarInsuranceForm from "./components/Cars/CarInsuranceForm";
 
+import SeeAllUsers from "./pages/AdminFunctions/SeeAllUsers";
+import UserProfile from "./pages/AdminFunctions/UserProfile";
+
+
 function App() {
     return (
         <Router>
@@ -48,6 +52,8 @@ function App() {
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/make-payment/:pid" element={<PaymentForm />} />
 
+                
+
 
 
                 <Route path="/admin" element={<AdminDashboard />} />
@@ -55,7 +61,9 @@ function App() {
                 <Route path="/customer" element={<CustomerDashboard />} />
                 <Route path="/image-manager" element={<ImageManager />} />
 
-                {/* Add more routes as needed */}
+                <Route path="/users" element={<SeeAllUsers />} />
+                <Route path="/user/:uid" element={<UserProfile />} />
+
             </Routes>
         </Router>
     );

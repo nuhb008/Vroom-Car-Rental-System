@@ -12,20 +12,7 @@ const CustomerDashboard = () => {
 
   return (
     <div>
-      {/* Search bar and top navbar are commented out for now
-      <div style={styles.topNavbar}>
-        <div style={styles.logo}>YourLogo</div>
-        <input type="text" placeholder="Search by Brand, Model, or Keyword" style={styles.searchBar} />
-        <div style={styles.topRight}>
-          <button style={styles.topButton}>Login / Sign Up</button>
-          <button style={styles.sellButton}>Sell Now</button>
-          <div style={styles.callUs}>
-            <p style={{ margin: 0 }}>Call us at</p>
-            <strong>+880 964 320 7777</strong>
-          </div>
-        </div>
-      </div> */}
-
+      
       {/* Orange Navbar for Options */}
       <div style={styles.orangeNavbar}>
         <button style={styles.navButton} onClick={() => handleMenuClick('availableCars')}>Available Cars</button>

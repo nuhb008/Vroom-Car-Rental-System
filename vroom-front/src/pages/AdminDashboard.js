@@ -4,6 +4,7 @@ import CarListAll from "../components/Cars/CarListAll";
 import CheckInsuranceApplication from "./AdminFunctions/CheckInsuranceApplication";
 import CheckNewCarApplication from "./AdminFunctions/CheckNewCarApplication";
 import VerifyPayment from "./AdminFunctions/VerifyPayment";
+import SeeAllUsers from "./AdminFunctions/SeeAllUsers";
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
           <button style={styles.menuButton} onClick={() => handleMenuClick('allCars')}>See All Cars</button>
           <button style={styles.menuButton} onClick={() => handleMenuClick('allUsers')}>See All Users</button>
           <button style={styles.menuButton} onClick={() => handleMenuClick('insuranceApplications')}>Check Insurance Applications</button>
-          <button style={styles.menuButton} onClick={() => handleMenuClick('newCarApplications')}>Check New Car Applications</button>
+          <button style={styles.menuButton} onClick={() => handleMenuClick('newCarApplications')}>Check Car Maintenance</button>
           <button style={styles.menuButton} onClick={() => handleMenuClick('verifyPayments')}>Verify Payments</button>
         </div>
       )}
@@ -53,8 +54,7 @@ const AdminDashboard = () => {
         )}
         {currentView === 'allUsers' && (
           <div style={styles.viewContainer}>
-            <h2>All Users</h2>
-            {/* You can put your AllUsers component here */}
+            <SeeAllUsers />
           </div>
         )}
         {currentView === 'insuranceApplications' && (

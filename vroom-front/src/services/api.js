@@ -10,8 +10,14 @@ export const login = async (username, password) => {
     throw error.response?.data || "Login failed";
   }
 }
-export const getUsers = async () => axios.get(`${API_URL}/users`);
+export const getAllUsers = async () => axios.get(`${API_URL}/users`);
 export const getUserById = async (id) => axios.get(`${API_URL}/users/${id}`);
+
+export const getUserDetailsById = async (id) => axios.get(`${API_URL}/userdetails/${id}`);
+export const createUserDetails = async (userDetailsData) => axios.post(`${API_URL}/userdetails`, userDetailsData);
+export const updateUserDetails = async (id, userDetailsData) => axios.put(`${API_URL}/userdetails/${id}`, userDetailsData);
+export const deleteUserDetails = async (id) => axios.delete(`${API_URL}/userdetails/${id}`);
+
 export const deleteCar = async (regNo) => axios.delete(`${API_URL}/cars/regno/${regNo}`);
 export const getCarsByStatus = async (status) => axios.get(`${API_URL}/cars/${status}`);
 export const getCarsByOwner = async (id) => axios.get(`${API_URL}/cars/${id}`);

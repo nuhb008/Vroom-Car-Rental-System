@@ -32,7 +32,7 @@ function CheckNewCarApplication() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Check New Car Application</h2>
+      <h2 style={styles.title}>Check Car Maintenance</h2>
       {cars.length === 0 ? (
         <p>No cars under maintenance.</p>
       ) : (
@@ -144,3 +144,4 @@ const styles = {
     marginBottom: '10px',
   },
 };
+
