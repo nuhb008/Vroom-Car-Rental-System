@@ -226,5 +226,16 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE GetPaymentsByUserID(IN input_user_id INT)
+BEGIN
+    SELECT p.*
+    FROM payment p
+    JOIN rental r ON p.rentID = r.rentID
+    WHERE r.customer_id = input_user_id;
+END //
+
+DELIMITER ;
 
 

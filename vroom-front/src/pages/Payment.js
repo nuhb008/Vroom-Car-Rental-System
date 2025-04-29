@@ -67,9 +67,9 @@ const Payment = () => {
               {payments.map((payment) => (
                 <tr key={payment.PID}>
                   <td style={styles.td}>{payment.rentID}</td>
-                  <td style={styles.td}>{payment.PID}</td>
+                  <td style={styles.td}>{payment.pid}</td>
                   <td style={styles.td}>${payment.amount}</td>
-                  <td style={styles.td}>{payment.payment_method}</td>
+                  <td style={styles.td}>{payment.paymentMethod}</td>
                   <td
                     style={{
                       ...styles.td,
@@ -84,11 +84,11 @@ const Payment = () => {
                     {payment.status}
                   </td>
                   <td style={styles.td}>
-                    {payment.payment_date}{' '}
+                    {payment.paymentDate}{' '}
                     {(payment.status === 'Pending' || payment.status === 'Failed') && (
                       <button
                         style={styles.payButton}
-                        onClick={() => window.location.href = `/make-payment/${payment.PID}`}
+                        onClick={() => window.location.href = `/make-payment/${payment.pid}`}
                       >
                         Pay Now
                       </button>
