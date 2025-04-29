@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
-const CarBook = () => {
+const BookList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -175,4 +175,4 @@ const styles = {
   }
 };
 
-export default CarBook;
+export default BookList;
