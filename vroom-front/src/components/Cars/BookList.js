@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getAllBookings } from '../../services/api';
+import { getCustomerBookings } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../atoms/userAtom';
 const BookList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [user] = useAtom(userAtom);
 
   useEffect(() => {
     fetchBookings();
@@ -12,7 +15,8 @@ const BookList = () => {
   
   const fetchBookings = async () => {
     try {
-      const response = await getAllBookings();
+      console.log(user);
+      const response = await getCustomerBookings(user.uid);
       setBookings(response.data);
       setLoading(false);
     }

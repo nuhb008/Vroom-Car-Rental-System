@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAtom } from 'jotai';
+import { userAtom } from '../atoms/userAtom';
 
 const Payment = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const user = useAtom(userAtom);
+
   
   useEffect(() => {
     fetchPayments();
+    console.log(user);
   }, []);
   
   const fetchPayments = async () => {
