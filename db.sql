@@ -14,6 +14,17 @@ DROP TABLE IF EXISTS booking;
 SET FOREIGN_KEY_CHECKS = 1;
 
 DROP PROCEDURE IF EXISTS GetBookingsByCustomerId;
+DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
+DROP PROCEDURE IF EXISTS GetLatestBookingByRegNo;
+DROP PROCEDURE IF EXISTS GetRentalWithRemainingByBID;
+DROP PROCEDURE IF EXISTS GetBookingsByBID;
+
+DROP FUNCTION IF EXISTS CalculateTotalAmount;
+DROP FUNCTION IF EXISTS GetRemainingAmount;
+DROP FUNCTION IF EXISTS GetRemainingAmountFailed;
+
+DROP TRIGGER IF EXISTS after_booking_insert;
+
 
 -- DDLs
 -- ===============================================================
@@ -212,8 +223,95 @@ INSERT INTO payment (rentID, amount, payment_date, payment_method, status, trans
 (15, 210.00, '2025-03-15', 'Cash', 'Paid', 'TXN137');
 
 
+
 -- Functions and Procedures
 -- ===============================================================
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetPaymentsByUserID(IN input_user_id INT)
+BEGIN
+    SELECT p.*
+    FROM payment p
+    JOIN rental r ON p.rentID = r.rentID
+    WHERE r.customer_id = input_user_id;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetLatestBookingByRegNo(IN p_regNo VARCHAR(20))
+BEGIN
+    SELECT b.*, r.status
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE b.regNo = p_regNo
+    ORDER BY b.tillDate DESC
+    LIMIT 1;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE FUNCTION CalculateTotalAmount(start_date DATE, end_date DATE, car_rate DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE days INT;
+    SET days = DATEDIFF(end_date, start_date);
+    RETURN days * car_rate;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE FUNCTION GetRemainingAmount(rent_id INT) RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    DECLARE total_paid DECIMAL(10,2);
+    DECLARE total_due DECIMAL(10,2);
+
+    SELECT IFNULL(SUM(p.amount), 0)
+    INTO total_paid
+    FROM payment p
+    WHERE p.rentID = rent_id AND p.status = 'Paid';
+
+    SELECT r.totalAmount
+    INTO total_due
+    FROM rental r
+    WHERE r.rentID = rent_id;
+
+    RETURN total_due - total_paid;
+END //
+
+DELIMITER ;
+
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetRentalWithRemainingByBID(IN booking_id INT)
+BEGIN
+    SELECT 
+        r.rentID,
+        r.BID,
+        r.customer_id,
+		r.totalAmount,
+        r.status
+    FROM rental r
+    WHERE r.BID = booking_id;
+END //
+
+DELIMITER ;
+
+
+
 DELIMITER //
 
 CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
@@ -229,16 +327,42 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DELIMITER //
 
-CREATE PROCEDURE GetPaymentsByUserID(IN input_user_id INT)
+CREATE PROCEDURE GetBookingsByBID(IN book_id INT)
 BEGIN
-    SELECT p.*
-    FROM payment p
-    JOIN rental r ON p.rentID = r.rentID
-    WHERE r.customer_id = input_user_id;
+    SELECT r.rentID as BID, b.regNo, b.fromDate, b.tillDate, r.status
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE b.BID = book_id;
 END //
 
 DELIMITER ;
 
+
+
+
+
+-- Triggers
+-- ===============================================================
+DELIMITER //
+
+CREATE TRIGGER after_booking_insert
+AFTER INSERT ON booking
+FOR EACH ROW
+BEGIN
+    DECLARE car_rate DECIMAL(10,2);
+    DECLARE total_amount DECIMAL(10,2);
+
+    SELECT rate INTO car_rate
+    FROM cars
+    WHERE regNo = NEW.regNo;
+
+    SET total_amount = CalculateTotalAmount(NEW.fromDate, NEW.tillDate, car_rate);
+
+    INSERT INTO rental (BID, totalAmount, status)
+    VALUES (NEW.BID, total_amount, 'Active');
+
+END //
+DELIMITER ;
 
 DELIMITER //
 CREATE TRIGGER insurance_validation_trigger
@@ -298,7 +422,6 @@ END //
 
 DELIMITER ;
 
-CALL GetHighestBookedCarByOwner(3); 
 
 
 

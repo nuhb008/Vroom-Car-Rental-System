@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Logger;
 
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/rentals")
@@ -84,6 +85,38 @@ public class RentalController {
             return ResponseEntity.ok(rentals);
         } else {
             logger.warning("No rentals found for customer ID: " + customerId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/bid/{bid}")
+    public ResponseEntity<Rental> updateRentalCustomerId(@PathVariable int bid, @RequestBody Rental rental) {
+        Rental updated = rentalService.updateCustomerId(bid, rental.getCustomerId());
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/bid/{bid}")
+    public ResponseEntity<Rental> getRentalByBookingId(@PathVariable int bid) {
+        Rental rental = rentalService.getRentalByBookingId(bid);
+        if (rental != null) {
+            return ResponseEntity.ok(rental);
+        } else {
+            logger.warning("Rental not found with BID: " + bid);
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/bid-remain/{bid}")
+    public ResponseEntity<Rental> getRentalRemainByBookingId(@PathVariable int bid) {
+        Rental rental = rentalService.getRentalRemainByBookingId(bid);
+        if (rental != null) {
+            return ResponseEntity.ok(rental);
+        } else {
+            logger.warning("Rental not found with BID: " + bid);
             return ResponseEntity.notFound().build();
         }
     }

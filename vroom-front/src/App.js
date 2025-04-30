@@ -20,6 +20,8 @@ import Payment from './pages/Payment';
 import PaymentForm from "./components/PaymentForm";
 import ImageManager from "./components/Images/ImageManager";
 import CarInsuranceForm from "./components/Cars/CarInsuranceForm";
+import PaymentFormBook from "./components/PaymentFormBook";
+import BookingPage from "./pages/BookingPage";
 
 import SeeAllUsers from "./pages/AdminFunctions/SeeAllUsers";
 import UserProfile from "./pages/AdminFunctions/UserProfile";
@@ -47,10 +49,12 @@ function App() {
                 <Route path="/cars/profile/:regNo" element={<CarProfile />} />
                 <Route path="/bookcar/:regNo" element={<BookCar />} />
                 <Route path="/car-bookings" element={<BookList />} />
+                <Route path="/booking-page/:bid" element={<BookingPage />} />
 
 
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/make-payment/:pid" element={<PaymentForm />} />
+                <Route path="/make-payment-book/:bid" element={<PaymentFormBook />} />
 
                 
 
