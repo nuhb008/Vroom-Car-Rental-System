@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getPaymentsByCustomerId } from '../../services/api'; 
-import { userAtom } from '../../atoms/userAtom';
-import { useAtom } from 'jotai';
+import { getPaymentsByStatus, updatePayment } from '../../services/api'; 
 
 function VerifyPayment() {
-  const [rentals, setRentals] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [user] = useAtom(userAtom); 
     const [payments, setPayments] = useState([]);
     useEffect(() => {
-      if (user?.uid) {
-        fetchPaymentsByCustomerId(2);
-      }
-    }, [user?.uid]);
+        fetchPaymentsByStatus();
+    }, []);
     
-    const fetchPaymentsByCustomerId = async (customerId) => {
+    const fetchPaymentsByStatus = async () => {
       try {
-        const response = await getPaymentsByCustomerId(customerId);
+        const response = await getPaymentsByStatus("Pending");
         setPayments(response.data);
         setLoading(false);
       } catch (error) {
@@ -26,6 +21,23 @@ function VerifyPayment() {
         setLoading(false);
       }
     };
+    
+    const handleStatusUpdate = async (payment, newStatus) => {
+      const updatedPayment = {
+        ...payment,
+        status: newStatus,
+        paymentDate: new Date().toISOString().split('T')[0],
+      };
+    
+      try {
+        await updatePayment(payment.pid || payment.PID, updatedPayment);
+        fetchPaymentsByStatus(); // Refresh list
+      } catch (err) {
+        console.error(`Error updating payment to ${newStatus}:`, err);
+        setError(`Failed to mark payment as ${newStatus}.`);
+      }
+    };
+    
     
     
     
@@ -41,7 +53,7 @@ function VerifyPayment() {
     return (
       <div style={styles.pageContainer}>
         <div style={styles.headerCard}>
-          <h2 style={styles.title}>My Payments</h2>
+          <h2 style={styles.title}>Pending Payments</h2>
         </div>
     
         {error && <div style={styles.errorText}>{error}</div>}
@@ -55,8 +67,8 @@ function VerifyPayment() {
             <table style={styles.table}>
               <thead>
                 <tr>
-                  <th style={styles.th}>Rent ID</th>
-                  <th style={styles.th}>Payment ID</th>
+                  <th style={styles.th}>Date</th>
+                  <th style={styles.th}>Transaction ID</th>
                   <th style={styles.th}>Amount</th>
                   <th style={styles.th}>Method</th>
                   <th style={styles.th}>Status</th>
@@ -66,10 +78,10 @@ function VerifyPayment() {
               <tbody>
                 {payments.map((payment) => (
                   <tr key={payment.PID}>
-                    <td style={styles.td}>{payment.rentID}</td>
-                    <td style={styles.td}>{payment.PID}</td>
+                    <td style={styles.td}>{payment.paymentDate}</td>
+                    <td style={styles.td}>{payment.transactionID}</td>
                     <td style={styles.td}>${payment.amount}</td>
-                    <td style={styles.td}>{payment.payment_method}</td>
+                    <td style={styles.td}>{payment.paymentMethod}</td>
                     <td
                       style={{
                         ...styles.td,
@@ -85,75 +97,24 @@ function VerifyPayment() {
                     </td>
                     <td style={styles.td}>
                       {payment.payment_date}{' '}
-                      {(payment.status === 'Pending' || payment.status === 'Failed') && (
-                        <button
-                          style={styles.payButton}
-                          onClick={() => window.location.href = `/make-payment/${payment.PID}`}
-                        >
-                          Pay Now
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-<div style={styles.headerCard}>
-          <h2 style={styles.title}>My Payments</h2>
-        </div>
-    
-        {error && <div style={styles.errorText}>{error}</div>}
-    
-        {payments.length === 0 ? (
-          <div style={styles.noDataContainer}>
-            <p style={styles.noDataText}>No payment records found.</p>
-          </div>
-        ) : (
-          <div style={styles.tableContainer}>
-            <table style={styles.table}>
-              <thead>
-                <tr>
-                  <th style={styles.th}>Rent ID</th>
-                  <th style={styles.th}>Payment ID</th>
-                  <th style={styles.th}>Amount</th>
-                  <th style={styles.th}>Method</th>
-                  <th style={styles.th}>Status</th>
-                  <th style={styles.th}>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.map((payment) => (
-                  <tr key={payment.PID}>
-                    <td style={styles.td}>{payment.rentID}</td>
-                    <td style={styles.td}>{payment.PID}</td>
-                    <td style={styles.td}>${payment.amount}</td>
-                    <td style={styles.td}>{payment.payment_method}</td>
-                    <td
-                      style={{
-                        ...styles.td,
-                        color:
-                          payment.status === 'Paid'
-                            ? '#28a745'
-                            : payment.status === 'Pending'
-                            ? '#ffc107'
-                            : '#dc3545',
-                      }}
-                    >
-                      {payment.status}
-                    </td>
-                    <td style={styles.td}>
-                      {payment.payment_date}{' '}
-                      {(payment.status === 'Pending' || payment.status === 'Failed') && (
-                        <button
-                          style={styles.payButton}
-                          onClick={() => window.location.href = `/make-payment/${payment.PID}`}
-                        >
-                          Pay Now
-                        </button>
-                      )}
+                      {payment.status === 'Pending' && (
+                              <>
+                                <button
+                                  type="button"
+                                  style={styles.payButton}
+                                  onClick={() => handleStatusUpdate(payment, 'Paid')}
+                                >
+                                  Verify
+                                </button>
+                                <button
+                                  type="button"
+                                  style={{ ...styles.payButton, backgroundColor: '#dc3545', marginLeft: '10px' }}
+                                  onClick={() => handleStatusUpdate(payment, 'Failed')}
+                                >
+                                  Mark as Failed
+                                </button>
+                              </>
+                            )}
                     </td>
                   </tr>
                 ))}
