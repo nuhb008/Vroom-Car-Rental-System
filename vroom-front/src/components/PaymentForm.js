@@ -51,7 +51,7 @@ const PaymentForm = () => {
 
     const updatedPayment = {
       ...formData,
-      status: 'Paid',
+      status: 'Pending',
       paymentDate: new Date().toISOString().split('T')[0],
     };
 

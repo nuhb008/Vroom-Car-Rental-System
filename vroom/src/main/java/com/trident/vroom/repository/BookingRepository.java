@@ -61,7 +61,7 @@ public class BookingRepository {
 
     // Get Booking by ID
     public Booking getBookingById(int id) {
-        String sql = "SELECT * FROM booking WHERE BID = ?";
+        String sql = "CALL GetBookingsByBID(?)";
         List<Booking> bookings = jdbcTemplate.query(sql, rowMapper, id);
         return bookings.isEmpty() ? null : bookings.get(0);
     }

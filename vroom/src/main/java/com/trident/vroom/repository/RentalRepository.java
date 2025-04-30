@@ -84,5 +84,11 @@ public class RentalRepository {
         return null;
     }    
 
-    
+    // Get Rental Remain by BID
+    public Rental getRentalRemainByBID(int bid) {
+        String sql = "CALL GetRentalWithRemainingByBID(?)";
+        List<Rental> rentals = jdbcTemplate.query(sql, rowMapper, bid);
+        return rentals.isEmpty() ? null : rentals.get(0);
+    }
+
 }

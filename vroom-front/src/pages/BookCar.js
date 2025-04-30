@@ -91,7 +91,9 @@ const BookCar = () => {
         alert('Booking successful!');
         // Redirect to the "My Booked" component
         updateRentalByBID(response.data.bid, rentalData)
-        navigate('/dashboard');
+          // .then( res => {
+          //   console.log(res.data);})
+        navigate('/make-payment-book/' + response.data.bid);
 
       })
       .catch(error => {

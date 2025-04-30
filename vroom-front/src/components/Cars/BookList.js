@@ -28,12 +28,7 @@ const BookList = () => {
 
   const handlePaymentClick = (bookingId, amount) => {
     // Navigate to the payment page with booking details
-    navigate(`/payment/${bookingId}`, { 
-      state: { 
-        bookingId, 
-        amount
-      }
-    });
+    navigate(`/booking-page/${bookingId}`);
   };
   
   if (loading) {
@@ -75,9 +70,9 @@ const BookList = () => {
                   <span style={styles.label}>Status:</span>
                   <span style={{
                     ...styles.value,
-                    color: booking.status === "Paid" ? "#28a745" : 
+                    color: booking.status === "Active" ? "#28a745" : 
                           //  booking.status === "Pending" ? "#ffc107" : 
-                           booking.status === "Unpaid" ? "#dc3545" : "#007bff"
+                           booking.status === "Cancelled" ? "#dc3545" : "#007bff"
                   }}>
                     {booking.status}
                   </span>
@@ -90,14 +85,12 @@ const BookList = () => {
                   </div>
                 )}
               </div>
-              {booking.status === "Unpaid" && (
-                <button 
+              <button 
                   style={styles.paymentButton}
                   onClick={() => handlePaymentClick(booking.bid, booking.totalAmount)}
                 >
-                  Pay Now
-                </button>
-              )}
+                  Details
+              </button>
             </div>
           ))}
         </div>

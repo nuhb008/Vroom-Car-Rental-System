@@ -17,9 +17,12 @@ DROP PROCEDURE IF EXISTS GetBookingsByCustomerId;
 DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DROP PROCEDURE IF EXISTS GetLatestBookingByRegNo;
 DROP PROCEDURE IF EXISTS GetRentalWithRemainingByBID;
+DROP PROCEDURE IF EXISTS GetBookingsByBID;
 
 DROP FUNCTION IF EXISTS CalculateTotalAmount;
 DROP FUNCTION IF EXISTS GetRemainingAmount;
+DROP FUNCTION IF EXISTS GetRemainingAmountFailed;
+
 DROP TRIGGER IF EXISTS after_booking_insert;
 
 
@@ -203,65 +206,21 @@ INSERT INTO rental (BID, customer_id, totalAmount, status) VALUES
 
 -- Insert data into payment table
 INSERT INTO payment (rentID, amount, payment_date, payment_method, status, transactionID) VALUES
-(1, 100.00, '2025-03-01', 'Credit Card', 'Paid', 'TXN123-1'),
-(1, 60.00,  '2025-03-03', 'Bank Transfer', 'Pending', 'TXN123-2'),
-(1, 40.00,  '2025-03-05', 'Cash', 'Paid', 'TXN123-3'),
-
-(2, 100.00, '2025-03-02', 'Cash', 'Paid', 'TXN124-1'),
-(2, 100.00, '2025-03-04', 'Bank Transfer', 'Paid', 'TXN124-2'),
-(2, 50.00,  '2025-03-06', 'Credit Card', 'Failed', 'TXN124-3'),
-
-(3, 100.00, '2025-03-03', 'Bank Transfer', 'Failed', 'TXN125-1'),
-(3, 100.00, '2025-03-05', 'Cash', 'Failed', 'TXN125-2'),
-(3, 100.00, '2025-03-07', 'Credit Card', 'Failed', 'TXN125-3'),
-
-(4, 150.00, '2025-03-04', 'Credit Card', 'Paid', 'TXN126-1'),
-(4, 150.00, '2025-03-06', 'Bank Transfer', 'Paid', 'TXN126-2'),
-(4, 100.00, '2025-03-08', 'Cash', 'Paid', 'TXN126-3'),
-
-(5, 50.00,  '2025-03-05', 'Cash', 'Pending', 'TXN127-1'),
-(5, 50.00,  '2025-03-07', 'Credit Card', 'Paid', 'TXN127-2'),
-(5, 50.00,  '2025-03-09', 'Bank Transfer', 'Paid', 'TXN127-3'),
-
-(6, 60.00,  '2025-03-06', 'Credit Card', 'Paid', 'TXN128-1'),
-(6, 60.00,  '2025-03-08', 'Cash', 'Pending', 'TXN128-2'),
-(6, 60.00,  '2025-03-10', 'Bank Transfer', 'Paid', 'TXN128-3'),
-
-(7, 70.00,  '2025-03-07', 'Bank Transfer', 'Pending', 'TXN129-1'),
-(7, 80.00,  '2025-03-09', 'Cash', 'Paid', 'TXN129-2'),
-(7, 70.00,  '2025-03-11', 'Credit Card', 'Failed', 'TXN129-3'),
-
-(8, 150.00, '2025-03-08', 'Credit Card', 'Paid', 'TXN130-1'),
-(8, 100.00, '2025-03-10', 'Bank Transfer', 'Paid', 'TXN130-2'),
-(8, 100.00, '2025-03-12', 'Cash', 'Paid', 'TXN130-3'),
-
-(9, 100.00, '2025-03-09', 'Cash', 'Paid', 'TXN131-1'),
-(9, 110.00, '2025-03-11', 'Credit Card', 'Paid', 'TXN131-2'),
-(9, 110.00, '2025-03-13', 'Bank Transfer', 'Paid', 'TXN131-3'),
-
-(10, 90.00,  '2025-03-10', 'Credit Card', 'Paid', 'TXN132-1'),
-(10, 90.00,  '2025-03-12', 'Cash', 'Paid', 'TXN132-2'),
-(10, 100.00, '2025-03-14', 'Bank Transfer', 'Pending', 'TXN132-3'),
-
-(11, 100.00, '2025-03-11', 'Bank Transfer', 'Pending', 'TXN133-1'),
-(11, 80.00,  '2025-03-13', 'Credit Card', 'Failed', 'TXN133-2'),
-(11, 70.00,  '2025-03-15', 'Cash', 'Paid', 'TXN133-3'),
-
-(12, 100.00, '2025-03-12', 'Cash', 'Failed', 'TXN134-1'),
-(12, 60.00,  '2025-03-14', 'Credit Card', 'Failed', 'TXN134-2'),
-(12, 40.00,  '2025-03-16', 'Bank Transfer', 'Pending', 'TXN134-3'),
-
-(13, 100.00, '2025-03-13', 'Credit Card', 'Paid', 'TXN135-1'),
-(13, 100.00, '2025-03-15', 'Cash', 'Paid', 'TXN135-2'),
-(13, 80.00,  '2025-03-17', 'Bank Transfer', 'Paid', 'TXN135-3'),
-
-(14, 100.00, '2025-03-14', 'Bank Transfer', 'Paid', 'TXN136-1'),
-(14, 70.00,  '2025-03-16', 'Credit Card', 'Paid', 'TXN136-2'),
-(14, 50.00,  '2025-03-18', 'Cash', 'Paid', 'TXN136-3'),
-
-(15, 70.00,  '2025-03-15', 'Cash', 'Paid', 'TXN137-1'),
-(15, 70.00,  '2025-03-17', 'Bank Transfer', 'Pending', 'TXN137-2'),
-(15, 70.00,  '2025-03-19', 'Credit Card', 'Paid', 'TXN137-3');
+(1, 200.00, '2025-03-01', 'Credit Card', 'Paid', 'TXN123'),
+(2, 250.00, '2025-03-02', 'Cash', 'Paid', 'TXN124'),
+(3, 300.00, '2025-03-03', 'Bank Transfer', 'Failed', 'TXN125'),
+(4, 400.00, '2025-03-04', 'Credit Card', 'Paid', 'TXN126'),
+(5, 150.00, '2025-03-05', 'Cash', 'Paid', 'TXN127'),
+(6, 180.00, '2025-03-06', 'Credit Card', 'Paid', 'TXN128'),
+(7, 220.00, '2025-03-07', 'Bank Transfer', 'Pending', 'TXN129'),
+(8, 350.00, '2025-03-08', 'Credit Card', 'Paid', 'TXN130'),
+(9, 320.00, '2025-03-09', 'Cash', 'Paid', 'TXN131'),
+(10, 280.00, '2025-03-10', 'Credit Card', 'Paid', 'TXN132'),
+(11, 250.00, '2025-03-11', 'Bank Transfer', 'Pending', 'TXN133'),
+(12, 200.00, '2025-03-12', 'Cash', 'Failed', 'TXN134'),
+(13, 280.00, '2025-03-13', 'Credit Card', 'Paid', 'TXN135'),
+(14, 220.00, '2025-03-14', 'Bank Transfer', 'Paid', 'TXN136'),
+(15, 210.00, '2025-03-15', 'Cash', 'Paid', 'TXN137');
 
 
 
@@ -332,6 +291,9 @@ END //
 
 DELIMITER ;
 
+
+
+
 DELIMITER //
 
 CREATE PROCEDURE GetRentalWithRemainingByBID(IN booking_id INT)
@@ -340,7 +302,7 @@ BEGIN
         r.rentID,
         r.BID,
         r.customer_id,
-        GetRemainingAmount(r.rentID) AS totalAmount,
+		r.totalAmount,
         r.status
     FROM rental r
     WHERE r.BID = booking_id;
@@ -349,17 +311,34 @@ END //
 DELIMITER ;
 
 
+
 DELIMITER //
 
 CREATE PROCEDURE GetBookingsByCustomerId(IN cust_id INT)
 BEGIN
-    SELECT b.*, IF(GetRemainingAmount(r.rentID) = 0, 'Paid', 'Unpaid') AS status
+    SELECT b.*, r.status
     FROM booking b
     JOIN rental r ON b.BID = r.BID
     WHERE r.customer_id = cust_id;
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE GetBookingsByBID(IN book_id INT)
+BEGIN
+    SELECT r.rentID as BID, b.regNo, b.fromDate, b.tillDate, r.status
+    FROM booking b
+    JOIN rental r ON b.BID = r.BID
+    WHERE b.BID = book_id;
+END //
+
+DELIMITER ;
+
+
+
+
 
 -- Triggers
 -- ===============================================================
