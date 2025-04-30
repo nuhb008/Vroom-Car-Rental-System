@@ -12,7 +12,7 @@ function CheckNewCarApplication() {
     try {
       const res = await getAllCars();
       const maintenanceCars = res.data.filter(
-        (car) => car.status === 'Maintenance'
+        (car) => car.status === 'Maintenance' || car.status === null
       );
       setCars(maintenanceCars);
     } catch (err) {
@@ -60,9 +60,11 @@ function CheckNewCarApplication() {
                 <span style={styles.value}>{car.fuelType}</span>
               </div>
               <div style={styles.detailItem}>
-                <span style={styles.label}>Status:</span>
-                <span style={styles.value}>{car.status}</span>
-              </div>
+              <span style={styles.label}>Status:</span>
+              <span style={styles.value}>
+                {car.status === null ? 'Waiting to be available' : car.status}
+              </span>
+            </div>
             </div>
             <div style={styles.buttonGroup}>
               <button style={styles.submitButton} onClick={() => verifyCar(car)}>

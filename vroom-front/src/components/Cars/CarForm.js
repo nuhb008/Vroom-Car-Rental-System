@@ -26,7 +26,14 @@ const CarForm = () => {
     }, [regNo]);
 
     const handleChange = (e) => {
-        setCar({ ...car, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+    
+        // Map "Available" to null before saving to state
+        if (name === "status") {
+            setCar((prevCar) => ({ ...prevCar, status: value === "Available" ? null : value }));
+        } else {
+            setCar((prevCar) => ({ ...prevCar, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
