@@ -7,10 +7,10 @@
 
 ## Features
 
-### Client
+### Customer
 - **Rent a car**: Browse available cars and make a reservation.
 - **View rented cars**: See details of your currently rented cars.
-- **Return a car**: Return cars you’ve rented.
+- **Cancel Booking**: Cancel Booked Cars.
 - **Make Payment**: Pay for the car rented which will be further verified by the admin.
 
 ### Admin
@@ -20,7 +20,7 @@
 - **Check Car Maintanance**: View the status and verify for available.
 - **Verify Payments**: Verify Payments.
  
-### Customer
+### Owner
 - **Add a Car**: Add Cars with different registration number.
 - **Edit a Car**: Edit everything except registration number.
 - **Check Insurance Application**: Verify Insurance of a Car added by owner.
