@@ -19,19 +19,34 @@ public class InsuranceRepository {
     private final RowMapper<Insurance> rowMapper = (rs, rowNum) -> new Insurance(
             rs.getInt("IID"),
             rs.getString("regNo"),
-            rs.getString("providerName"),
-            rs.getString("policyNumber"),
-            rs.getDouble("coverageAmount"),
-            rs.getDate("startDate"),
-            rs.getDate("endDate")
+            rs.getString("provider_name"),  // Fixed column name to match DB schema
+            rs.getString("policy_number"),  // Fixed column name to match DB schema
+            rs.getDouble("coverage_amount"), // Fixed column name to match DB schema
+            rs.getDate("start_date"),       // Fixed column name to match DB schema
+            rs.getDate("end_date"),         // Fixed column name to match DB schema
+            rs.getString("status")
     );
 
     // Insert Insurance
     public void saveInsurance(Insurance insurance) {
-        String sql = "INSERT INTO insurance (regNo, provider_name, policy_number, coverage_amount, start_date, end_date) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, insurance.getRegNo(), insurance.getProviderName(), insurance.getPolicyNumber(),
-                insurance.getCoverageAmount(), insurance.getStartDate(), insurance.getEndDate());
+        String sql = "INSERT INTO insurance (regNo, provider_name, policy_number, coverage_amount, start_date, end_date, status) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        // Default to 'Invalid' if status is null (matching the DB schema default)
+        String status = insurance.getStatus();
+        if (status == null) {
+            status = "Invalid";
+        }
+        
+        jdbcTemplate.update(sql, 
+            insurance.getRegNo(), 
+            insurance.getProviderName(), 
+            insurance.getPolicyNumber(),
+            insurance.getCoverageAmount(), 
+            insurance.getStartDate(), 
+            insurance.getEndDate(),
+            status
+        );
     }
 
     // Get All Insurances
@@ -49,10 +64,20 @@ public class InsuranceRepository {
 
     // Update Insurance
     public void updateInsurance(int id, Insurance insurance) {
-        String sql = "UPDATE insurance SET regNo = ?, providerName = ?, policyNumber = ?, coverageAmount = ?, startDate = ?, endDate = ? " +
+        String sql = "UPDATE insurance SET regNo = ?, provider_name = ?, policy_number = ?, " +
+                     "coverage_amount = ?, start_date = ?, end_date = ?, status = ? " +
                      "WHERE IID = ?";
-        jdbcTemplate.update(sql, insurance.getRegNo(), insurance.getProviderName(), insurance.getPolicyNumber(),
-                insurance.getCoverageAmount(), insurance.getStartDate(), insurance.getEndDate(), id);
+        
+        jdbcTemplate.update(sql, 
+            insurance.getRegNo(), 
+            insurance.getProviderName(), 
+            insurance.getPolicyNumber(),
+            insurance.getCoverageAmount(), 
+            insurance.getStartDate(), 
+            insurance.getEndDate(), 
+            insurance.getStatus(),
+            id
+        );
     }
 
     // Delete Insurance
@@ -63,13 +88,37 @@ public class InsuranceRepository {
 
     // Get Insurance by regNo
     public List<Insurance> getInsurancesByRegNo(String regNo) {
-        String sql = "SELECT * FROM insurances WHERE regNo = ?";
+        String sql = "SELECT * FROM insurance WHERE regNo = ?";
         return jdbcTemplate.query(sql, rowMapper, regNo);
     }
 
     // Get Insurance active in a given date
     public List<Insurance> getInsurancesActiveOnDate(String regNo, Date date) {
-        String sql = "SELECT * FROM insurance WHERE regNo = ? AND startDate <= ? AND endDate >= ?";
+        String sql = "SELECT * FROM insurance WHERE regNo = ? AND start_date <= ? AND end_date >= ?";
         return jdbcTemplate.query(sql, rowMapper, regNo, date, date);
     }
-}
+
+    // Get Insurance by status
+    public List<Insurance> getInsurancesByStatus(String status) {
+        String sql = "SELECT * FROM insurance WHERE status = ?";
+        return jdbcTemplate.query(sql, rowMapper, status);
+    }
+    
+    // New method to get count of active insurances for a car
+    public int countActiveInsurancesForCar(String regNo, Date currentDate) {
+        String sql = "SELECT COUNT(*) FROM insurance WHERE regNo = ? AND start_date <= ? AND end_date >= ? AND status = 'Valid'";
+        return jdbcTemplate.queryForObject(sql, Integer.class, regNo, currentDate, currentDate);
+    }
+    
+    // New method to update insurance status
+    public void updateInsuranceStatus(int id, String status) {
+        String sql = "UPDATE insurance SET status = ? WHERE IID = ?";
+        jdbcTemplate.update(sql, status, id);
+    }
+
+    public int approveInsurance(int id) {
+        String sql = "UPDATE insurance SET status = 'Valid' WHERE IID = ? AND status = 'Invalid'";
+        return jdbcTemplate.update(sql, id);
+    }
+    
+} 

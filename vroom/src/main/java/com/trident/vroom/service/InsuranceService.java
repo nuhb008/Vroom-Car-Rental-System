@@ -49,4 +49,34 @@ public class InsuranceService {
     public List<Insurance> getInsurancesActiveOnDate(String regNo, Date date) {
         return insuranceRepository.getInsurancesActiveOnDate(regNo, date);
     }
+
+    public List<Insurance> getInsurancesByStatus(String status) {
+        if (status == null || status.trim().isEmpty()) {
+            throw new IllegalArgumentException("Status cannot be null or empty");
+        }
+        try {
+            return insuranceRepository.getInsurancesByStatus(status);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching insurances by status: " + status, e);
+        }
+    }
+
+    public boolean approveInsurance(int id) {
+        Insurance existingInsurance = insuranceRepository.getInsuranceById(id);
+        if (existingInsurance == null) {
+            throw new RuntimeException("Insurance not found with ID: " + id);
+        }
+        
+        // Check if it's already valid
+        if ("Valid".equals(existingInsurance.getStatus())) {
+            return false; // Already approved
+        }
+        
+        int rowsAffected = insuranceRepository.approveInsurance(id);
+        return rowsAffected > 0;
+    }
+
+    public void updateInsuranceStatus(int id, String status) {
+        insuranceRepository.updateInsuranceStatus(id, status);
+    }
 }

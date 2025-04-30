@@ -13,17 +13,16 @@ public class UserDetailsService {
     @Autowired
     private UserDetailsRepository userDetailsRepository;
 
-    // ✅ Get UserDetails by UID
     public UserDetails getUserDetailsByUid(int uid) {
         return userDetailsRepository.findByUID(uid).orElse(null);
     }
 
-    // ✅ Create UserDetails
+   
     public void createUserDetails(UserDetails userDetails) {
         userDetailsRepository.saveUserDetails(userDetails);
     }
 
-    // ✅ Update UserDetails
+ 
     public UserDetails updateUserDetails(int uid, UserDetails updatedUserDetails) {
         Optional<UserDetails> existingDetails = userDetailsRepository.findByUID(uid);
 
@@ -41,7 +40,7 @@ public class UserDetailsService {
         return null;
     }
 
-    // ✅ Delete UserDetails
+
     public void deleteUserDetails(int uid) {
         userDetailsRepository.deleteUserDetails(uid);
     }

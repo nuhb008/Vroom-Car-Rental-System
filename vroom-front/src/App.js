@@ -23,6 +23,10 @@ import CarInsuranceForm from "./components/Cars/CarInsuranceForm";
 import PaymentFormBook from "./components/PaymentFormBook";
 import BookingPage from "./pages/BookingPage";
 
+import SeeAllUsers from "./pages/AdminFunctions/SeeAllUsers";
+import UserProfile from "./pages/AdminFunctions/UserProfile";
+
+
 function App() {
     return (
         <Router>
@@ -52,6 +56,8 @@ function App() {
                 <Route path="/make-payment/:pid" element={<PaymentForm />} />
                 <Route path="/make-payment-book/:bid" element={<PaymentFormBook />} />
 
+                
+
 
 
                 <Route path="/admin" element={<AdminDashboard />} />
@@ -59,7 +65,9 @@ function App() {
                 <Route path="/customer" element={<CustomerDashboard />} />
                 <Route path="/image-manager" element={<ImageManager />} />
 
-                {/* Add more routes as needed */}
+                <Route path="/users" element={<SeeAllUsers />} />
+                <Route path="/user/:uid" element={<UserProfile />} />
+
             </Routes>
         </Router>
     );

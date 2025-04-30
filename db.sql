@@ -324,6 +324,7 @@ END //
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS GetPaymentsByUserID;
 DELIMITER //
 
 CREATE PROCEDURE GetBookingsByBID(IN book_id INT)
@@ -359,6 +360,64 @@ BEGIN
 
     INSERT INTO rental (BID, totalAmount, status)
     VALUES (NEW.BID, total_amount, 'Active');
+
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER insurance_validation_trigger
+AFTER UPDATE ON insurance
+FOR EACH ROW
+BEGIN
+    -- Apply a 5% discount to the car's rate
+    IF NEW.status = 'Valid' AND OLD.status = 'Invalid' THEN
+        UPDATE cars
+        SET rate = rate * 0.95
+        WHERE regNo = NEW.regNo;
+    END IF;
+END//
+DELIMITER ;
+
+
+-- First, let's check the current values before the update
+SELECT i.IID, i.regNo, i.status, c.rate
+FROM insurance i
+JOIN cars c ON i.regNo = c.regNo
+WHERE i.IID = 3;  -- Replace with an actual insurance ID from your database
+
+-- Now update the insurance status to Valid
+UPDATE insurance
+SET status = 'Valid'
+WHERE IID = 3;  -- Replace with an actual insurance ID from your database
+
+-- Finally, check the values after the update to confirm the trigger worked
+SELECT i.IID, i.regNo, i.status, c.rate
+FROM insurance i
+JOIN cars c ON i.regNo = c.regNo
+WHERE i.IID = 3;  -- Same ID as used above
+
+
+DELIMITER //
+
+ DROP PROCEDURE IF EXISTS GetHighestBookedCarByOwner //
+
+CREATE PROCEDURE GetHighestBookedCarByOwner(IN input_owner_id INT)
+BEGIN
+    SELECT c.regNo, COUNT(b.BID) AS booking_count
+    FROM cars c
+    LEFT JOIN booking b ON c.regNo = b.regNo
+    WHERE c.owner_id = input_owner_id
+    GROUP BY c.regNo
+    HAVING booking_count = (
+        SELECT MAX(book_count)
+        FROM (
+            SELECT COUNT(b2.BID) AS book_count
+            FROM cars c2
+            LEFT JOIN booking b2 ON c2.regNo = b2.regNo
+            WHERE c2.owner_id = input_owner_id
+            GROUP BY c2.regNo
+        ) AS counts
+    );
 END //
 
 DELIMITER ;

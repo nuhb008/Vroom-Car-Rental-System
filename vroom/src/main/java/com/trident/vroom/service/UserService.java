@@ -42,4 +42,8 @@ public class UserService {
     public void deleteUser(int id) {
         userRepository.deleteUser(id);
     }
+
+    public List<User> getHighestBookedCarByOwner(int UID) {
+        return userRepository.getHighestBookedCarByOwner(UID);
+    }
 }
