@@ -1,11 +1,15 @@
-import React from 'react'
-import v from '../assets/v.svg'
-import r from '../assets/r.svg'
-import logo from '../assets/tire-svgrepo-com.svg'
-import m from '../assets/m.svg'
-import '../App.css'
+import React from 'react';
+import { useAtom } from 'jotai';
+import { userAtomWithPersistence } from '../atoms/userAtom';
+import v from '../assets/v.svg';
+import r from '../assets/r.svg';
+import logo from '../assets/tire-svgrepo-com.svg';
+import m from '../assets/m.svg';
+import '../App.css';
 
 const LandingPage = () => {
+  const [user] = useAtom(userAtomWithPersistence); 
+
   return (
     <div className="App">
       <header className="App-header">
@@ -16,18 +20,15 @@ const LandingPage = () => {
           <img src={logo} className="App-logo tire-logo" alt="Tire" />
           <img src={m} className="App-logo" alt="M" />
         </p>
-        <p>
-          Your Trusted Car Rental Service
-        </p>
-        <a
-          className="App-link"
-          href="/cars"
-        >
-          See Cars
-        </a>
+        <p>Your Trusted Car Rental Service</p>
+        {user && (
+          <a className="App-link" href="/cars">
+            See Cars
+          </a>
+        )}
       </header>
     </div>
-  )
-}
+  );
+};
 
 export default LandingPage;

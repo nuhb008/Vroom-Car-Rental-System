@@ -20,7 +20,7 @@ const Login = () => {
         password,
       });
   
-      const baseUser = response.data; // ✅ define baseUser here
+      const baseUser = response.data;
       setError("");
   
       let role = "";
@@ -41,8 +41,8 @@ const Login = () => {
         setError("Failed to fetch user details");
       }
   
-      const updatedUser = { ...baseUser, role }; // ✅ correct merge
-      setUser(updatedUser); // ✅ Save updated user
+      const updatedUser = { ...baseUser, role }; 
+      setUser(updatedUser); 
   
       // Navigate based on role
       if (role === "customer") {
