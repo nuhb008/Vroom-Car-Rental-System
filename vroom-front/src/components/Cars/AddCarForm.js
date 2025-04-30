@@ -11,9 +11,10 @@ const AddCarForm = () => {
         model: "",
         capacity: "",
         rate: "",
-        status: "",
+        status: "Maintenance",  // <-- set default
         fuelType: ""
     });
+    
 
     const [imageFile, setImageFile] = useState(null);
 
@@ -38,7 +39,7 @@ const AddCarForm = () => {
             }
 
             alert("Car added successfully!");
-            navigate("/cars");
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error adding car:", error);
             alert("Failed to add car. " + (error.response?.data || ""));
@@ -56,12 +57,19 @@ const AddCarForm = () => {
                     <input style={styles.input} type="number" name="capacity" value={car.capacity} onChange={handleChange} placeholder="Capacity" required />
                     <input style={styles.input} type="number" name="rate" value={car.rate} onChange={handleChange} placeholder="Rate per day" required />
                     
-                    <select style={styles.select} name="status" value={car.status} onChange={handleChange} required>
-                        <option value="">Select Status</option>
-                        <option value="Available">Available</option>
-                        <option value="Booked">Booked</option>
-                        <option value="Maintenance">Maintenance</option>
-                    </select>
+                    <select
+                            style={styles.select}
+                            name="status"
+                            value={car.status}
+                            disabled // <-- lock the field
+                            required
+                        >
+                            <option value="">Select Status</option>
+                            <option value="Available">Available</option>
+                            <option value="Booked">Booked</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+
                     
                     <select style={styles.select} name="fuelType" value={car.fuelType} onChange={handleChange} required>
                         <option value="">Select Fuel Type</option>
