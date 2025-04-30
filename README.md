@@ -3,7 +3,7 @@
 
 # Vroom - Car Rental System
 
-**Vroom**is a full-stack car rental system built with React for the frontend and Spring Boot for the backend. It utilizes MySQL as the database. This web application provides features for customer, owners and admins, offering an intuitive user experience for car rentals and management.
+**Vroom** is a full-stack car rental system built with React for the frontend and Spring Boot for the backend. It utilizes MySQL as the database. This web application provides features for customer, owners and admins, offering an intuitive user experience for car rentals and management.
 
 ## Features
 
