@@ -19,7 +19,7 @@
 - **Check Insurance Application**: Verify Insurance of a Car added by owner.
 - **Check Car Maintanance**: View the status and verify for available.
 - **Verify Payments**: Verify Payments.
-- 
+ 
 ### Customer
 - **Add a Car**: Add Cars with different registration number.
 - **Edit a Car**: Edit everything except registration number.
@@ -29,15 +29,15 @@
 - **Delete a Car**: View his/her own cars.
 
 ## Technologies Used
--**React**: Frontend library for building the user interface.
--**Spring Boot**: Backend framework for handling business logic and APIs.
--**MySQL**: Database backend for storing and managing application data.
+- **React**: Frontend library for building the user interface.
+- **Spring Boot**: Backend framework for handling business logic and APIs.
+- **MySQL**: Database backend for storing and managing application data.
 
 ## Prerequisites
-1.Node.js & npm installed.
-2.Java Development Kit (JDK) installed (version 20).
-3.MySQL Server installed and configured.
-4.An IDE like IntelliJ IDEA, Eclipse, or VS Code (optional but recommended).
+- Node.js & npm installed.
+- Java Development Kit (JDK) installed (version 20).
+- MySQL Server installed and configured.
+- An IDE like IntelliJ IDEA, Eclipse, or VS Code (optional but recommended).
 
 ## Installation
 1. Clone this repository:
