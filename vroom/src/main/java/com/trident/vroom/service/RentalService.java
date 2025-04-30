@@ -49,4 +49,26 @@ public class RentalService {
     public List<Rental> getRentalsByCustomerId(int customerId) {
         return rentalRepository.getRentalsByCustomerId(customerId);
     }
+
+    public Rental updateRentalByBID(int id, Rental rental) {
+        Rental existingRental = rentalRepository.getRentalById(id);
+        if (existingRental != null) {
+            rentalRepository.updateRental(id, rental);
+            return rental;
+        } else {
+            throw new RuntimeException("Rental not found with ID: " + id);
+        }
+    }
+    
+    public Rental updateCustomerId(int bid, Integer customerId) {
+        return rentalRepository.updateCustomerIdByBid(bid, customerId);
+    }
+
+    public Rental getRentalByBookingId(int bid) {
+        return rentalRepository.getRentalByBID(bid);
+    }
+    
+    public Rental getRentalRemainByBookingId(int bid) {
+        return rentalRepository.getRentalRemainByBID(bid);
+    }
 }

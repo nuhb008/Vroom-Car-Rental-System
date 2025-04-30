@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPaymentById,updatePayment} from '../services/api'; 
+import { getRentalRemainBID, createPayment } from '../services/api';
 
-const PaymentForm = () => {
-  const { pid } = useParams();
+const PaymentFormBook = () => {
+  const { bid } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ const PaymentForm = () => {
     transactionID: '',
   });
 
+  const [remainingAmount, setRemainingAmount] = useState(0);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -20,59 +21,66 @@ const PaymentForm = () => {
     'TXN-' + Date.now().toString(36) + '-' + Math.floor(Math.random() * 10000).toString(36);
 
   useEffect(() => {
-    const fetchPayment = async () => {
+    const fetchRental = async () => {
       try {
-        const res = await getPaymentById(pid);
-        const { rentID, amount } = res.data;
+        const res = await getRentalRemainBID(bid);
+        const { rentID, totalAmount } = res.data;
+
         setFormData((prev) => ({
           ...prev,
           rentID,
-          amount,
+          amount: totalAmount, // Default to max for convenience
           transactionID: generateTransactionID(),
         }));
+        setRemainingAmount(totalAmount);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch payment info.');
+        setError('Failed to fetch rental info.');
       }
     };
 
-    fetchPayment();
-  }, [pid]);
+    fetchRental();
+  }, [bid]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'amount') {
+      const num = parseFloat(value);
+      if (num >= 0 && num <= remainingAmount) {
+        setFormData((prev) => ({ ...prev, [name]: num }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
-
-  const today = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedPayment = {
+    const paymentData = {
       ...formData,
-      status: 'Pending',
       paymentDate: new Date().toISOString().split('T')[0],
+      status: 'Pending',
     };
 
     try {
-      await updatePayment(pid, updatedPayment);
-      setSuccess('Payment updated successfully!');
+      await createPayment(paymentData);
+      setSuccess('Payment successful!');
       setTimeout(() => navigate('/payment'), 1500);
     } catch (err) {
       console.error(err);
-      setError('Failed to update payment.');
+      setError('Failed to create payment.');
     }
   };
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Process Payment</h2>
+      <h2 style={styles.heading}>Make a Payment</h2>
       {error && <p style={styles.error}>{error}</p>}
       {success && <p style={styles.success}>{success}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <p><strong>Rent ID:</strong> {formData.rentID}</p>
-        <p><strong>Amount:</strong> ${formData.amount}</p>
+        <p><strong>Remaining Amount:</strong> ${remainingAmount}</p>
         <p><strong>Transaction ID:</strong> {formData.transactionID}</p>
         <p><strong>Date:</strong> {new Date().toISOString().split('T')[0]}</p>
 
@@ -95,6 +103,7 @@ const PaymentForm = () => {
     </div>
   );
 };
+
 
 const styles = {
   container: {
@@ -141,4 +150,4 @@ const styles = {
   },
 };
 
-export default PaymentForm;
+export default PaymentFormBook;
